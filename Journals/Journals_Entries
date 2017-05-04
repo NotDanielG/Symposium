@@ -1,0 +1,5 @@
+05/04/17
+Goal:
+Researching a way to rotate objects. The method I found was using AffineTransform and to rotate
+it by a certain number of degrees in radians. For example, I can rotate a square by 45 degrees.
+Also making the basic screen, GUIapplication.  
