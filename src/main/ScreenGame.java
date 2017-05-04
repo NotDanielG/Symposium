@@ -23,6 +23,8 @@ public class ScreenGame extends Screen implements KeyListener, Runnable{
 	public void initObjects(List<Visible> viewObjects) {
 		Graphic x = new Graphic(100,100, "resources/square.png");
 		viewObjects.add(x);
+		Enemy y = new Enemy(700,500,50,50,600,"resources/cactus.png");
+		viewObjects.add(y);
 
 	}
 
