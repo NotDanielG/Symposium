@@ -1,7 +1,19 @@
 05/04/17
-Goal:
+Task done:
 Researching a way to rotate objects. The method I found was using AffineTransform and to rotate
 it by a certain number of degrees in radians. For example, I can rotate a square by 45 degrees.
 Also making the basic screen, GUIapplication. Also make a new class with a "z-position" which
 will determine the location of the object outside the standard 800x600 screen. Tomorrow's goal
 is getting the new class to show up on the screen. 
+
+05/05/17
+Task done:
+From Nockles, he gave me a method on how to make the side scroll work. Was helpful but the
+g.drawImage() is a bit confusing. I have to look into the method and how changing the numbers
+affect the image and the location of the image. Made a bunch of new classes like Platforms, or
+EnemyAttack. Platforms are what you can stand on, so the collision should be that if the bottom
+of the character is inside the platform with a positive velocity(moving downwards). EnemyAttack
+would kind of like the feces in the previous game except with animation. Could add new stuff
+so that the attacks' speed change based on surroundings.
+
+
