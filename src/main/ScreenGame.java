@@ -14,6 +14,7 @@ import gui.components.Visible;
 public class ScreenGame extends Screen implements KeyListener, Runnable{
 	private List<Enemy> stuff;
 	private boolean gameRunning;
+	private Player player;
 	public ScreenGame(int width, int height) {
 		super(width, height);
 		gameRunning = true;
@@ -23,8 +24,13 @@ public class ScreenGame extends Screen implements KeyListener, Runnable{
 	public void initObjects(List<Visible> viewObjects) {
 		Graphic x = new Graphic(100,100, "resources/square.png");
 		viewObjects.add(x);
+		
 		Enemy y = new Enemy(700,500,50,50,600,"resources/cactus.png");
 		viewObjects.add(y);
+		
+		
+//		Enemy z = new Enemy(900, 600, 50,50, 900,"resources/cactus.png");
+//		viewObjects.add(z);
 
 	}
 
@@ -33,7 +39,6 @@ public class ScreenGame extends Screen implements KeyListener, Runnable{
 		return this;
 	}
 	public void keyPressed(KeyEvent e) {
-		
 		
 	}
 
@@ -48,7 +53,9 @@ public class ScreenGame extends Screen implements KeyListener, Runnable{
 		// TODO Auto-generated method stub
 		
 	}
-
+	public Player getPlayer(){
+		return player;
+	}
 	@Override
 	public void run() {
 		stuff = Collections.synchronizedList(new ArrayList<Enemy>());
