@@ -15,5 +15,11 @@ EnemyAttack. Platforms are what you can stand on, so the collision should be tha
 of the character is inside the platform with a positive velocity(moving downwards). EnemyAttack
 would kind of like the feces in the previous game except with animation. Could add new stuff
 so that the attacks' speed change based on surroundings.
-
+05/06/17
+Task done:
+Research on other types of side scrollers. Decided on what to focus on first, which is all of
+the smaller classes, like Enemy or Platform. Getting the different areas to load will probably
+take a lot of time to debug. I can debug the minor classes easier. Tomorrow's task should be
+finding a suitable sprite sheet. I got something in mind and I need to find how to utilize the
+sprite sheet.
 
