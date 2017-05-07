@@ -22,4 +22,10 @@ the smaller classes, like Enemy or Platform. Getting the different areas to load
 take a lot of time to debug. I can debug the minor classes easier. Tomorrow's task should be
 finding a suitable sprite sheet. I got something in mind and I need to find how to utilize the
 sprite sheet.
-
+05/07/17
+Task done:
+Found a way to use a sprite sheet using the subImage method that returns a BufferedImage of a
+portion. Problem is that I don't use BufferedImage, I use Image. I tried using BufferedImage
+version of drawImage but it didn't show anything. After around an hour of researching and 
+playing around, I figured out that BufferedImage is a subclass of Image, so you can 
+cast it and be able to use it as an Image.
