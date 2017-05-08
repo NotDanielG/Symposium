@@ -29,3 +29,9 @@ portion. Problem is that I don't use BufferedImage, I use Image. I tried using B
 version of drawImage but it didn't show anything. After around an hour of researching and 
 playing around, I figured out that BufferedImage is a subclass of Image, so you can 
 cast it and be able to use it as an Image.
+05/08/17
+Task done:
+Got the player to be able to move diagonally while they are pressing down two keys. However,
+there seems to be a bug where the player is zooming off the screen after you hold one of the
+buttons down. I suspect its due to the fact that the program is adding on too many of the same
+command into the list. Tomorrow should just be debugging the problems with the player class.

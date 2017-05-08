@@ -29,7 +29,6 @@ public class Platform extends MovingComponent implements Collidable {
 	}
 	@Override
 	public boolean isCollided() {
-		// TODO Auto-generated method stub
 		return false;
 	}
 

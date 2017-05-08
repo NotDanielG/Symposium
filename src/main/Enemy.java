@@ -14,7 +14,7 @@ import gui.components.Action;
 import gui.components.Graphic;
 import gui.components.MovingComponent;
 
-public class Enemy extends MovingComponent implements Action, ImageObserver{
+public class Enemy extends MovingComponent implements Action{
 	private int w;
 	private int h;
 	private int z;
@@ -34,7 +34,6 @@ public class Enemy extends MovingComponent implements Action, ImageObserver{
 		setY(y);
 		icon = new ImageIcon(photo);
 		buff = new BufferedImage(w,h,BufferedImage.TYPE_INT_ARGB);
-		BufferedImage xd = buff.getSubimage(0, 100, 5, 5);
 		try {
 			buff = ImageIO.read(new File(photo));
 		} catch (IOException e) {
@@ -88,11 +87,6 @@ public class Enemy extends MovingComponent implements Action, ImageObserver{
 	public void act() {
 		// TODO Auto-generated method stub
 		
-	}
-	@Override
-	public boolean imageUpdate(Image arg0, int arg1, int arg2, int arg3, int arg4, int arg5) {
-		// TODO Auto-generated method stub
-		return true;
 	}
 
 }
