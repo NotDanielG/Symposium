@@ -125,8 +125,13 @@ public class ScreenGame extends Screen implements KeyListener, Runnable{
 
 	private void checkButtonList() {
 		for(Key key: keyCommands){
-			if(key != null && key.isJumped())
-			key.act();
+			if(key.getCode() == KeyEvent.VK_W && !key.isJumped()){
+				key.setJumped(true);
+				key.act();
+			}
+			else{
+				key.act();
+			}
 		}
 		
 	}
