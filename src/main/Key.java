@@ -5,7 +5,6 @@ import gui.components.Action;
 public class Key implements Action {
 	private Action action;
 	private int code;
-	private boolean jumped;
 	public Key() {
 		code = 0;
 	}
@@ -26,13 +25,5 @@ public class Key implements Action {
 		return code;
 	}
 
-	public boolean isJumped() {
-		return jumped;
-	}
-
-	public void setJumped(boolean jumped) {
-		this.jumped = jumped;
-	}
-	
 
 }

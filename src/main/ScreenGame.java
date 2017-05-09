@@ -28,7 +28,7 @@ public class ScreenGame extends Screen implements KeyListener, Runnable{
 	public void initObjects(List<Visible> viewObjects) {
 		
 		keyCommands = new ArrayList<Key>();
-		player = new Player(500,500,100,100, "resources/square.png");
+		player = new Player(300,300,100,100, "resources/square.png");
 		viewObjects.add(player);
 		
 		Enemy y = new Enemy(700,500,50,50,600,"resources/cactus.png");
@@ -42,47 +42,39 @@ public class ScreenGame extends Screen implements KeyListener, Runnable{
 	}
 	public void keyPressed(KeyEvent e) {
 		int keyCode = e.getKeyCode();
-		Key key = new Key();
-		switch(keyCode){
-		case KeyEvent.VK_W:
-			key.setCode(keyCode);
-			key.setJumped(true);
-			key.setAction(new Action(){
-				public void act(){
-//					getPlayer().setY(getPlayer().getY() - getPlayer().getAcceleration());
-					getPlayer().setJump(true);
+		if(!checkDuplicate(keyCode)){
+			Key key = new Key();
+			switch(keyCode){
+			case KeyEvent.VK_W:
+				if(!getPlayer().isJump()){
+					key.setCode(keyCode);
+					key.setAction(new Action(){
+						public void act(){
+							getPlayer().setJump(true);
+						}
+					});
+					key.act();
 				}
-			});
-			keyCommands.add(key);
-			break;
-		case KeyEvent.VK_S:
-			key.setCode(keyCode);
-			key.setAction(new Action(){
-				public void act(){
-					player.setY(player.getY() + getPlayer().getAcceleration());
-				}
-			});
-			keyCommands.add(key);
-			break;
-		case KeyEvent.VK_D:
-			key.setCode(keyCode);
-			key.setAction(new Action(){
-				public void act(){
-					player.setX(player.getX() + getPlayer().getAcceleration());
-				}
-			});
-			keyCommands.add(key);
-			break;
-		case KeyEvent.VK_A:
-			key.setCode(keyCode);
-			key.setAction(new Action(){
-				public void act(){
-					player.setX(player.getX() - getPlayer().getAcceleration());
-				}
-			});
-			keyCommands.add(key);
-			break;
-		
+				break;
+			case KeyEvent.VK_D:
+				key.setCode(keyCode);
+				key.setAction(new Action(){
+					public void act(){
+						player.setX(player.getX() + getPlayer().getAcceleration());
+					}
+				});
+				keyCommands.add(key);
+				break;
+			case KeyEvent.VK_A:
+				key.setCode(keyCode);
+				key.setAction(new Action(){
+					public void act(){
+						player.setX(player.getX() - getPlayer().getAcceleration());
+					}
+				});
+				keyCommands.add(key);
+				break;
+			}
 		}
 		
 	}
@@ -125,15 +117,16 @@ public class ScreenGame extends Screen implements KeyListener, Runnable{
 
 	private void checkButtonList() {
 		for(Key key: keyCommands){
-			if(key.getCode() == KeyEvent.VK_W && !key.isJumped()){
-				key.setJumped(true);
-				key.act();
-			}
-			else{
-				key.act();
-			}
+			key.act();
 		}
 		
 	}
-
+	private boolean checkDuplicate(int keyCode){
+		for(Key key: keyCommands){
+			if(keyCode == key.getCode()){
+				return true;
+			}
+		}
+		return false;
+	}
 }

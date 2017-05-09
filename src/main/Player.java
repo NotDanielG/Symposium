@@ -29,10 +29,9 @@ public class Player extends MovingComponent {
 		z = x;
 		imageSrc = photo;
 		loadImage();
-		initialyV = 5;
+		initialyV = 7;
 		acceleration = 5;
 		grav = 1;
-		System.out.println("y: " + y);
 		setPosx(x);
 		setPosy(y);
 		this.play();
@@ -75,15 +74,18 @@ public class Player extends MovingComponent {
 			long current = System.currentTimeMillis();
 			int difference = (int)(current - start);
 			double newV = initialyV - grav*(double)(difference/100);
-			System.out.println(getPosy());
-			if(getPosy() > 502){
+			if(getPosy() + getVy() >= 301){
 				jump = false;
-				super.setY(500);
+				setVy(0);
 			}
 			else{
 				super.setVy(-newV);
 			}
 		}
+		else{
+			super.setY(300);
+		}
+		
 	}
 	public int getAcceleration(){
 		return acceleration;

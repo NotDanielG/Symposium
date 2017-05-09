@@ -35,3 +35,9 @@ Got the player to be able to move diagonally while they are pressing down two ke
 there seems to be a bug where the player is zooming off the screen after you hold one of the
 buttons down. I suspect its due to the fact that the program is adding on too many of the same
 command into the list. Tomorrow should just be debugging the problems with the player class.
+05/09/17
+Task done:
+Finally debugged the issue. It had to do with the method continuously acting on the act() method
+when its supposed to only happen once. To resolve this, I just made it so that when the 'W' gets
+clicked, it acts but does not go into the ArrayList. Tomorrow's goal should be to do the
+player's x velocity, and start on the platform class. 
