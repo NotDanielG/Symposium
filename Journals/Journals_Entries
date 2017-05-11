@@ -41,3 +41,8 @@ Finally debugged the issue. It had to do with the method continuously acting on 
 when its supposed to only happen once. To resolve this, I just made it so that when the 'W' gets
 clicked, it acts but does not go into the ArrayList. Tomorrow's goal should be to do the
 player's x velocity, and start on the platform class. 
+05/11/17
+Task done:
+Resolved bug where you cannot call the getPlayer() method from enemies/platforms. Made some
+fields static so that the other objects can call them in order to fulfill their function. 
+Tomorrow should be finishing the platform class.

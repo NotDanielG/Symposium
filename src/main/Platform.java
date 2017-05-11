@@ -2,9 +2,13 @@ package main;
 
 import java.awt.Image;
 
+
 import javax.swing.ImageIcon;
 
 import gui.components.MovingComponent;
+import main.Start;
+import main.ScreenGame;
+import gui.Screen;
 
 public class Platform extends MovingComponent implements Collidable {
 	private String imageSrc;
@@ -29,7 +33,12 @@ public class Platform extends MovingComponent implements Collidable {
 	}
 	@Override
 	public boolean isCollided() {
+		Player player = Start.screen.getPlayer();
+		if(player.getVx() > 0 &&(player.getX() > getX() && player.getX() < getX() + getWidth())){
+			
+		}
 		return false;
 	}
+	
 
 }

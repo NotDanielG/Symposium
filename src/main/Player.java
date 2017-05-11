@@ -12,15 +12,18 @@ import javax.swing.ImageIcon;
 import gui.components.MovingComponent;
 
 public class Player extends MovingComponent {
-	private int z;
+	
 	private String imageSrc;
 	private Image image;
-	private boolean load;
+	
 	private BufferedImage buff;
 	
-	private long start;
-	private int acceleration;
+	private boolean load;
 	private boolean jump;
+	private long start;
+	
+	private int z;
+	private int acceleration;
 	private int initialyV;
 	private int grav;
 	

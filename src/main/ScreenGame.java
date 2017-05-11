@@ -34,6 +34,8 @@ public class ScreenGame extends Screen implements KeyListener, Runnable{
 		Enemy y = new Enemy(700,500,50,50,600,"resources/cactus.png");
 		viewObjects.add(y);
 		
+		
+		
 	}
 
 	@Override
