@@ -58,14 +58,14 @@ public class Platform extends MovingComponent implements Collidable , Action{
 	@Override
 	public boolean isCollided() {
 		Player player = Start.screen.getPlayer();
-		if(player.getVy() > 0 && player.getY() + player.findSpeed() > getY()
-				&&(leftCorner(player) || rightCorner(player) )){
+		if(player.getVy() > 0 && player.getY() + player.getHeight() + player.findSpeed() > getY()
+				&&(leftCorner(player) || rightCorner(player))){
 			return true;
 		}
 		return false;
 	}
 	private boolean rightCorner(Player player) {
-		if(player.getX() + player.getWidth()> getX()){
+		if(player.getX() + player.getWidth() > getX()){
 			return true;
 		}
 		return false;
