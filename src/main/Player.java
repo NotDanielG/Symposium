@@ -72,6 +72,7 @@ public class Player extends MovingComponent {
 				if(platform != null){
 					if(!platform.isCollided()){
 						setLand(false);
+						setPlatform(null);
 					}
 				}
 				else{
