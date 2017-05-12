@@ -34,7 +34,13 @@ public class ScreenGame extends Screen implements KeyListener, Runnable{
 		Enemy y = new Enemy(700,500,50,50,600,"resources/cactus.png");
 		viewObjects.add(y);
 		
-		
+		Platform z = new Platform(350,350, 400, 50, 500, "resources/platformTemp.png");
+		z.setAction(new Action(){
+			public void act() {
+				getPlayer().hitGround(z.getY());
+			}
+		});
+		viewObjects.add(z);
 		
 	}
 

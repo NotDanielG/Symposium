@@ -1,6 +1,7 @@
 package main;
 
 import java.awt.Graphics2D;
+
 import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
@@ -88,5 +89,7 @@ public class Enemy extends MovingComponent implements Action{
 		// TODO Auto-generated method stub
 		
 	}
+	//player.getX() > getX() && player.getX() < getX() + getWidth()
+	//&& player.getY() < getY()+ getHeight() && player.getY() > getY())
 
 }

@@ -77,17 +77,17 @@ public class Player extends MovingComponent {
 			long current = System.currentTimeMillis();
 			int difference = (int)(current - start);
 			double newV = initialyV - grav*(double)(difference/100);
-			if(getPosy() + getVy() >= 301){
-				jump = false;
-				setVy(0);
-			}
-			else{
+//			if(getPosy() + getVy() >= 301){
+//				jump = false;
+//				setVy(0);
+//			}
+//			else{
 				super.setVy(-newV);
-			}
+//			}
 		}
-		else{
-			super.setY(300);
-		}
+//		else{
+//			super.setY(300);
+//		}
 		
 	}
 	public int getAcceleration(){
@@ -99,6 +99,11 @@ public class Player extends MovingComponent {
 	public void setJump(boolean jump) {
 		start = System.currentTimeMillis();
 		this.jump = jump;
+	}
+	public void hitGround(int y){
+		jump = false;
+		setVy(0);
+		super.setY(y);
 	}
 	
 }
