@@ -89,12 +89,12 @@ public class Player extends MovingComponent {
 			super.setVy(-findSpeed());
 		}
 		else{
-//			if(!onLand){
-//				long current = System.currentTimeMillis();
-//				int difference = (int)(current - start1);
-//				double newV = grav*(double)(difference/100);
-//				super.setVy(-newV);
-//			}
+			if(!onLand){
+				long current = System.currentTimeMillis();
+				int difference = (int)(current - start1);
+				double newV = grav*(double)(difference/100);
+				super.setVy(-newV);
+			}
 		}
 		
 		
