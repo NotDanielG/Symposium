@@ -3,6 +3,8 @@ package main;
 import java.awt.event.KeyEvent;
 
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -12,7 +14,7 @@ import gui.components.Action;
 import gui.components.Graphic;
 import gui.components.Visible;
 
-public class ScreenGame extends Screen implements KeyListener, Runnable{
+public class ScreenGame extends Screen implements KeyListener, MouseListener,Runnable{
 	private List<Enemy> stuff;
 	private boolean gameRunning;
 	private Player player;
@@ -28,19 +30,28 @@ public class ScreenGame extends Screen implements KeyListener, Runnable{
 	public void initObjects(List<Visible> viewObjects) {
 		
 		keyCommands = new ArrayList<Key>();
-		player = new Player(300,300,100,100, "resources/square.png");
+		player = new Player(400,400,50,50, "resources/square.png");
 		viewObjects.add(player);
 		
-		Enemy y = new Enemy(700,500,50,50,600,"resources/cactus.png");
-		viewObjects.add(y);
-		
-		Platform z = new Platform(350,350, 400, 50, 500, "resources/platformTemp.png");
+		Platform z = new Platform(350,350, 400, 30, 500, "resources/platform.png");
 		z.setAction(new Action(){
 			public void act() {
-				getPlayer().hitGround(z.getY());
+				getPlayer().hitGround((int)z.getY() - player.getHeight());
+				getPlayer().setLand(true);
+				getPlayer().setPlatform(z);
 			}
 		});
 		viewObjects.add(z);
+		
+		Platform p1 = new Platform(10,570, 500, 30, 500, "resources/platform.png");
+		p1.setAction(new Action(){
+			public void act() {
+				getPlayer().hitGround((int)p1.getY() - player.getHeight());
+				getPlayer().setLand(true);
+				getPlayer().setPlatform(p1);
+			}
+		});
+		viewObjects.add(p1);
 		
 	}
 
@@ -54,7 +65,7 @@ public class ScreenGame extends Screen implements KeyListener, Runnable{
 			Key key = new Key();
 			switch(keyCode){
 			case KeyEvent.VK_W:
-				if(!getPlayer().isJump()){
+				if(!getPlayer().isJump() || getPlayer().getVy() == 0){
 					key.setCode(keyCode);
 					key.setAction(new Action(){
 						public void act(){
@@ -136,5 +147,38 @@ public class ScreenGame extends Screen implements KeyListener, Runnable{
 			}
 		}
 		return false;
+	}
+
+	public MouseListener getMouseListener(){
+		return this;
+	}
+	@Override
+	public void mouseClicked(MouseEvent e) {
+		System.out.println("x: " + e.getX() +"y: " + e.getY());
+		
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseExited(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mousePressed(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+		
 	}
 }

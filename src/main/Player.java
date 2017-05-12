@@ -17,10 +17,13 @@ public class Player extends MovingComponent {
 	private Image image;
 	
 	private BufferedImage buff;
+	private Platform platform;
 	
 	private boolean load;
 	private boolean jump;
+	private boolean onLand;
 	private long start;
+	private long start1;
 	
 	private int z;
 	private int acceleration;
@@ -32,9 +35,10 @@ public class Player extends MovingComponent {
 		z = x;
 		imageSrc = photo;
 		loadImage();
-		initialyV = 7;
+		initialyV = 0;
 		acceleration = 5;
 		grav = 1;
+		
 		setPosx(x);
 		setPosy(y);
 		this.play();
@@ -65,6 +69,14 @@ public class Player extends MovingComponent {
 		while(isRunning()){
 			try {
 				Thread.sleep(REFRESH_RATE);
+				if(platform != null){
+					if(!platform.isCollided()){
+						setLand(false);
+					}
+				}
+				else{
+					setLand(false);
+				}
 				updatePhysics();
 				update();
 			} catch (InterruptedException e) {
@@ -72,22 +84,19 @@ public class Player extends MovingComponent {
 			}
 		}
 	}
-	private void updatePhysics() {
+	private void updatePhysics(){
 		if(jump){
-			long current = System.currentTimeMillis();
-			int difference = (int)(current - start);
-			double newV = initialyV - grav*(double)(difference/100);
-//			if(getPosy() + getVy() >= 301){
-//				jump = false;
-//				setVy(0);
-//			}
-//			else{
-				super.setVy(-newV);
+			super.setVy(-findSpeed());
+		}
+		else{
+//			if(!onLand){
+//				long current = System.currentTimeMillis();
+//				int difference = (int)(current - start1);
+//				double newV = grav*(double)(difference/100);
+//				super.setVy(-newV);
 //			}
 		}
-//		else{
-//			super.setY(300);
-//		}
+		
 		
 	}
 	public int getAcceleration(){
@@ -98,12 +107,33 @@ public class Player extends MovingComponent {
 	}
 	public void setJump(boolean jump) {
 		start = System.currentTimeMillis();
+		initialyV = 7;
 		this.jump = jump;
+	}
+	public double findSpeed(){
+		long current = System.currentTimeMillis();
+		int difference = (int)(current - start);
+		double newV = initialyV - grav*(double)(difference/100);
+		return newV;
 	}
 	public void hitGround(int y){
 		jump = false;
+		onLand = true;
 		setVy(0);
+		initialyV = 0;
 		super.setY(y);
+	}
+	public void setLand(boolean b){
+		if(!b){
+			start1 = System.currentTimeMillis();
+		}
+		onLand = b;
+	}
+	public boolean getLand(){
+		return onLand;
+	}
+	public void setPlatform(Platform platform){
+		this.platform = platform;
 	}
 	
 }
