@@ -66,6 +66,7 @@ public class Player extends MovingComponent {
 	}
 	public void run(){
 		setRunning(true);
+		setLand(false);
 		while(isRunning()){
 			try {
 				Thread.sleep(REFRESH_RATE);
@@ -125,7 +126,7 @@ public class Player extends MovingComponent {
 		super.setY(y);
 	}
 	public void setLand(boolean b){
-		if(!b){
+		if(b == false){
 			start1 = System.currentTimeMillis();
 		}
 		onLand = b;
