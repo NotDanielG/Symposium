@@ -33,7 +33,7 @@ public class ScreenGame extends Screen implements KeyListener, MouseListener,Run
 		player = new Player(400,400,50,50, "resources/square.png");
 		viewObjects.add(player);
 		
-		Platform z = new Platform(350,350, 400, 30, 500, "resources/platform.png");
+		Platform z = new Platform(350,450, 400, 30, 500, "resources/platform.png");
 		z.setAction(new Action(){
 			public void act() {
 				getPlayer().hitGround((int)z.getY() - player.getHeight());
@@ -63,7 +63,7 @@ public class ScreenGame extends Screen implements KeyListener, MouseListener,Run
 			Key key = new Key();
 			switch(keyCode){
 			case KeyEvent.VK_W:
-				if(!getPlayer().isJump() || getPlayer().getVy() < 1){
+				if(!getPlayer().isJump() && getPlayer().getVy() < 1.5){
 					key.setCode(keyCode);
 					key.setAction(new Action(){
 						public void act(){
