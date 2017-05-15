@@ -24,7 +24,6 @@ public class Platform extends MovingComponent implements Collidable , Action{
 		super(x, y, w, h);
 		imageSrc = picture;
 		loadImage();
-		System.out.println(y);
 		setPosx(x);
 		setPosy(y);
 		this.play();
@@ -82,10 +81,10 @@ public class Platform extends MovingComponent implements Collidable , Action{
 			image = (Image) buff;
 			g.drawImage(image,0,0 , getWidth(), getHeight(), 0, 0, image.getWidth(null), image.getHeight(null),
 					null);
-//			setPosx(getPosx() + getVx());
-//			setPosy(getPosy() + getVy());
-//			super.setX((int) getPosx());
-//			super.setY((int) getPosy());
+			setPosx(getPosx() + getVx());
+			setPosy(getPosy() + getVy());
+			super.setX((int) getPosx());
+			super.setY((int) getPosy());
 		}
 	}
 	public boolean leftCorner(Player player){

@@ -15,8 +15,8 @@ public class Player extends MovingComponent {
 	
 	private String imageSrc;
 	private Image image;
-	
 	private BufferedImage buff;
+	private Platform platform;
 	
 	private boolean load;
 	private boolean jump;
@@ -30,15 +30,17 @@ public class Player extends MovingComponent {
 	public Player(int x, int y,int w ,int h,String photo) {
 		super(x, y, w, h);
 		start = System.currentTimeMillis();
-		z = x;
+		platform = null;
 		imageSrc = photo;
-		loadImage();
+		z = x;
 		initialyV = 0;
 		acceleration = 5;
 		grav = 1.0;
 		
 		setPosx(x);
 		setPosy(y);
+		
+		loadImage();
 		this.play();
 	}
 	private void loadImage() {
@@ -57,11 +59,12 @@ public class Player extends MovingComponent {
 			image = (Image) buff;
 			g.drawImage(image,0,0 , getWidth(), getHeight(), 0, 0, image.getWidth(null), image.getHeight(null),
 					null);
-			setPosx(getPosx() + getVx());
+			
 			setPosy(getPosy() + getVy());
-			super.setX((int) getPosx());
 			super.setY((int) getPosy());
-			System.out.println(getVy());
+			
+			setPosx(getPosx() + getVx());
+			super.setX((int) getPosx());
 		}
 	}
 	public void run(){
@@ -69,8 +72,20 @@ public class Player extends MovingComponent {
 		while(isRunning()){
 			try {
 				Thread.sleep(REFRESH_RATE);
+				if(platform != null){
+					if(getX() + getWidth() < platform.getX() || getX() >= platform.getX()
+					   +platform.getWidth()){
+						setJump(false);
+						platform = null;
+					}
+				}
+				System.out.println("Player: " + getX());
+				if(platform != null){
+					System.out.println("Platform: " + platform.getX() +" "+ platform.getWidth());
+				}
 				updatePhysics();
 				update();
+				
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
@@ -83,16 +98,21 @@ public class Player extends MovingComponent {
 				super.setVy(-findSpeed());
 			}
 			else{
-				long current = System.currentTimeMillis();
-				int difference = (int)(current - start);
-				double newV = grav*(double)(difference/100);
-				super.setVy(newV);
+				if(platform == null){
+					long current = System.currentTimeMillis();
+					int difference = (int)(current - start);
+					double newV = grav*(double)(difference/100);
+					super.setVy(newV);
+				}
 			}
 		}
 		
 	}
 	public int getAcceleration(){
 		return acceleration;
+	}
+	public void setPlatform(Platform platform){
+		this.platform = platform;
 	}
 	public boolean isJump() {
 		return jump;
@@ -115,6 +135,7 @@ public class Player extends MovingComponent {
 		super.setY(y);
 	}
 	public void setStart(long start){
+		
 		this.start = start;
 		setVy(0);
 	}

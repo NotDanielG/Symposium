@@ -48,7 +48,11 @@ fields static so that the other objects can call them in order to fulfill their 
 Tomorrow should be finishing the platform class.
 05/12/17
 Task done:
-Able to make platforms and enable the player to jump onto them. Once the isCollided() method
 returns a true, it will stop the player's y velocity and land them on the platform. This checks
 if the y-velocity is negative as well. Next step should be to allow the player to be able to
 "fall off" the platform by just walking off.
+05/15/17
+Task done:
+Smoothed out the player class when its on the platform. Got the player to fall off the side of
+platform once it walks off. Need to fix the right side of platform. It doesn't can't check the
+platform's right side because it is set to null once it reaches out of bound.
