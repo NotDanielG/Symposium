@@ -37,7 +37,7 @@ public class ScreenGame extends Screen implements KeyListener, MouseListener,Run
 		z.setAction(new Action(){
 			public void act() {
 				getPlayer().hitGround((int)z.getY() - player.getHeight());
-//				getPlayer().setStart(System.currentTimeMillis());
+				getPlayer().setStart(System.currentTimeMillis());
 				getPlayer().setPlatform(z);
 			}
 		});
@@ -47,7 +47,7 @@ public class ScreenGame extends Screen implements KeyListener, MouseListener,Run
 		p1.setAction(new Action(){
 			public void act() {
 				getPlayer().hitGround((int)p1.getY() - player.getHeight());
-//				getPlayer().setStart(System.currentTimeMillis());
+				getPlayer().setStart(System.currentTimeMillis());
 				getPlayer().setPlatform(p1);
 			}
 		});

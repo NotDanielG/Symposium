@@ -73,15 +73,9 @@ public class Player extends MovingComponent {
 			try {
 				Thread.sleep(REFRESH_RATE);
 				if(platform != null){
-					if(getX() + getWidth() < platform.getX() || getX() >= platform.getX()
-					   +platform.getWidth()){
-						setJump(false);
+					if(platform.isCollided()){
 						platform = null;
 					}
-				}
-				System.out.println("Player: " + getX());
-				if(platform != null){
-					System.out.println("Platform: " + platform.getX() +" "+ platform.getWidth());
 				}
 				updatePhysics();
 				update();
@@ -98,12 +92,10 @@ public class Player extends MovingComponent {
 				super.setVy(-findSpeed());
 			}
 			else{
-				if(platform == null){
-					long current = System.currentTimeMillis();
-					int difference = (int)(current - start);
-					double newV = grav*(double)(difference/100);
-					super.setVy(newV);
-				}
+				long current = System.currentTimeMillis();
+				int difference = (int)(current - start);
+				double newV = grav*(double)(difference/100);
+				super.setVy(newV);
 			}
 		}
 		
@@ -135,7 +127,6 @@ public class Player extends MovingComponent {
 		super.setY(y);
 	}
 	public void setStart(long start){
-		
 		this.start = start;
 		setVy(0);
 	}

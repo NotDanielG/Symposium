@@ -60,16 +60,12 @@ public class Platform extends MovingComponent implements Collidable , Action{
 		if(player.getVy() > 0 && player.getY() + player.getHeight() + player.findSpeed() > getY()
 				&& player.getY() + player.getHeight() +player.findSpeed() < getY() + getHeight()
 				&&(leftCorner(player) || rightCorner(player))){
+			System.out.println(leftCorner(player));
 			return true;
 		}
 		return false;
 	}
-	private boolean rightCorner(Player player) {
-		if(player.getX() + player.getWidth() > getX()){
-			return true;
-		}
-		return false;
-	}
+	
 	public void act() {
 		action.act();
 	}
@@ -89,9 +85,15 @@ public class Platform extends MovingComponent implements Collidable , Action{
 	}
 	public boolean leftCorner(Player player){
 		if(player.getX() > getX() && player.getX() < getX() + getWidth()){
+			
 			return true;
 		}
 		return false;
 	}
-
+	private boolean rightCorner(Player player) {
+		if(player.getX() + player.getWidth() > getX() && player.getX() + player.getWidth() < getX() + getWidth()){
+			return true;
+		}
+		return false;
+	}
 }
