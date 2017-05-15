@@ -73,7 +73,7 @@ public class Player extends MovingComponent {
 			try {
 				Thread.sleep(REFRESH_RATE);
 				if(platform != null){
-					if(platform.isCollided()){
+					if(!platform.isCollided()){
 						platform = null;
 					}
 				}
@@ -88,15 +88,16 @@ public class Player extends MovingComponent {
 	}
 	private void updatePhysics(){
 		if(load){
-			if(jump){
+//			if(jump){
 				super.setVy(-findSpeed());
-			}
-			else{
-				long current = System.currentTimeMillis();
-				int difference = (int)(current - start);
-				double newV = grav*(double)(difference/100);
-				super.setVy(newV);
-			}
+			
+//			}
+//			else{
+//				long current = System.currentTimeMillis();
+//				int difference = (int)(current - start);
+//				double newV = grav*(double)(difference/100);
+//				super.setVy(newV);
+//			}
 		}
 		
 	}
