@@ -100,6 +100,7 @@ public class Player extends MovingComponent {
 //			}
 		}
 		
+		
 	}
 	public int getAcceleration(){
 		return acceleration;
