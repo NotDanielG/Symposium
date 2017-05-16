@@ -25,6 +25,7 @@ public class Player extends MovingComponent {
 	private int z;
 	private int acceleration;
 	private int initialyV;
+	private int health;
 	private double grav;
 	
 	public Player(int x, int y,int w ,int h,String photo) {
@@ -36,6 +37,8 @@ public class Player extends MovingComponent {
 		initialyV = 0;
 		acceleration = 5;
 		grav = 1.0;
+		health = 3;
+		
 		
 		setPosx(x);
 		setPosy(y);
@@ -73,7 +76,9 @@ public class Player extends MovingComponent {
 			try {
 				Thread.sleep(REFRESH_RATE);
 				if(platform != null){
-					if(!platform.isCollided()){
+					if(getX() > platform.getX() + platform.getWidth() ||
+							getX() + getWidth () < platform.getX() || jump){
+						setStart(System.currentTimeMillis());
 						platform = null;
 					}
 				}
@@ -88,16 +93,9 @@ public class Player extends MovingComponent {
 	}
 	private void updatePhysics(){
 		if(load){
-//			if(jump){
+			if(platform == null){
 				super.setVy(-findSpeed());
-			
-//			}
-//			else{
-//				long current = System.currentTimeMillis();
-//				int difference = (int)(current - start);
-//				double newV = grav*(double)(difference/100);
-//				super.setVy(newV);
-//			}
+			}
 		}
 		
 		
@@ -131,6 +129,10 @@ public class Player extends MovingComponent {
 	public void setStart(long start){
 		this.start = start;
 		setVy(0);
+	}
+	public void decreaseHP(){
+		System.out.println(health -1);
+		health--;
 	}
 	
 }

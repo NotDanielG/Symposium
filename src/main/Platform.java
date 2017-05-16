@@ -26,7 +26,6 @@ public class Platform extends MovingComponent implements Collidable , Action{
 		loadImage();
 		setPosx(x);
 		setPosy(y);
-		this.play();
 	}
 	private void loadImage() {
 		try{
@@ -60,7 +59,6 @@ public class Platform extends MovingComponent implements Collidable , Action{
 		if(player.getVy() > 0 && player.getY() + player.getHeight() + player.findSpeed() > getY()
 				&& player.getY() + player.getHeight() +player.findSpeed() < getY() + getHeight()
 				&&(leftCorner(player) || rightCorner(player))){
-			System.out.println(leftCorner(player));
 			return true;
 		}
 		return false;

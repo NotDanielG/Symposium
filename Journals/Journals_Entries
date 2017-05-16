@@ -56,3 +56,9 @@ Task done:
 Smoothed out the player class when its on the platform. Got the player to fall off the side of
 platform once it walks off. Need to fix the right side of platform. It doesn't can't check the
 platform's right side because it is set to null once it reaches out of bound.
+05/16/17
+Task done:
+Did the basics for the Enemy and the EnemyAttack. Gave each of the class their own respective
+shape.Debugged the player class so that the cube doesn't jitter around on the platform. All the
+basic classes should be finished for now. Rest of the week should be figuring out the issue
+with the platform sometimes having a nullpointerexception error and the side scoll.

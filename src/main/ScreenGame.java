@@ -30,7 +30,7 @@ public class ScreenGame extends Screen implements KeyListener, MouseListener,Run
 	public void initObjects(List<Visible> viewObjects) {
 		
 		keyCommands = new ArrayList<Key>();
-		player = new Player(400,400,50,50, "resources/square.png");
+		player = new Player(400,300,50,50, "resources/square.png");
 		viewObjects.add(player);
 		
 		Platform z = new Platform(350,450, 400, 30, 500, "resources/platform.png");
@@ -42,6 +42,7 @@ public class ScreenGame extends Screen implements KeyListener, MouseListener,Run
 			}
 		});
 		viewObjects.add(z);
+		z.play();
 		
 		Platform p1 = new Platform(10,570, 500, 30, 500, "resources/platform.png");
 		p1.setAction(new Action(){
@@ -52,7 +53,16 @@ public class ScreenGame extends Screen implements KeyListener, MouseListener,Run
 			}
 		});
 		viewObjects.add(p1);
+		p1.play();
 		
+		Enemy e = new Enemy(450,350,50,50, 450, "resources/triangle.png");
+		e.setAction(new Action(){
+			public void act(){
+				getPlayer().decreaseHP();
+			}
+		});
+		viewObjects.add(e);
+		e.play();
 	}
 
 	@Override
@@ -120,6 +130,7 @@ public class ScreenGame extends Screen implements KeyListener, MouseListener,Run
 	@Override
 	public void run() {
 		stuff = Collections.synchronizedList(new ArrayList<Enemy>());
+		
 		keyCommands = Collections.synchronizedList(new ArrayList<Key>());
 		
 		while(gameRunning){
