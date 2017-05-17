@@ -93,6 +93,7 @@ public class Player extends MovingComponent {
 			}
 		}
 		
+		
 	}
 	private void updatePhysics(){
 		if(load){
