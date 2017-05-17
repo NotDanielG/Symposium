@@ -82,6 +82,7 @@ public class Player extends MovingComponent {
 						platform = null;
 					}
 				}
+				
 				z = (int) getPosx();
 				System.out.println("Player z = " + z);
 				updatePhysics();
