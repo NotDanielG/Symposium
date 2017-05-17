@@ -70,6 +70,7 @@ public class ScreenGame extends Screen implements KeyListener, MouseListener,Run
 		viewObjects.add(p2);
 		p2.play();
 		
+		
 //		Enemy e = new Enemy(450,350,50,50, 450, "resources/triangle.png");
 //		e.setAction(new Action(){
 //			public void act(){
