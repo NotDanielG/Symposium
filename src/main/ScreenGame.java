@@ -19,6 +19,10 @@ public class ScreenGame extends Screen implements KeyListener, MouseListener,Run
 	private boolean gameRunning;
 	private Player player;
 	private List<Key> keyCommands;
+	
+	private int currentSection;
+	
+	
 	public ScreenGame(int width, int height) {
 		super(width, height);
 		gameRunning = true;
@@ -33,7 +37,7 @@ public class ScreenGame extends Screen implements KeyListener, MouseListener,Run
 		player = new Player(400,300,50,50, "resources/square.png");
 		viewObjects.add(player);
 		
-		Platform z = new Platform(350,450, 400, 30, 500, "resources/platform.png");
+		Platform z = new Platform(350,450, 400, 30, 250, "resources/platform.png");
 		z.setAction(new Action(){
 			public void act() {
 				getPlayer().hitGround((int)z.getY() - player.getHeight());
@@ -55,14 +59,25 @@ public class ScreenGame extends Screen implements KeyListener, MouseListener,Run
 		viewObjects.add(p1);
 		p1.play();
 		
-		Enemy e = new Enemy(450,350,50,50, 450, "resources/triangle.png");
-		e.setAction(new Action(){
-			public void act(){
-				getPlayer().decreaseHP();
+		Platform p2 = new Platform(10,570, 500, 30, 1200, "resources/platform.png");
+		p2.setAction(new Action(){
+			public void act() {
+				getPlayer().hitGround((int)p2.getY() - player.getHeight());
+				getPlayer().setStart(System.currentTimeMillis());
+				getPlayer().setPlatform(p2);
 			}
 		});
-		viewObjects.add(e);
-		e.play();
+		viewObjects.add(p2);
+		p2.play();
+		
+//		Enemy e = new Enemy(450,350,50,50, 450, "resources/triangle.png");
+//		e.setAction(new Action(){
+//			public void act(){
+//				getPlayer().decreaseHP();
+//			}
+//		});
+//		viewObjects.add(e);
+//		e.play();
 	}
 
 	@Override

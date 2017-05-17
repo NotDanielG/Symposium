@@ -82,6 +82,8 @@ public class Player extends MovingComponent {
 						platform = null;
 					}
 				}
+				z = (int) getPosx();
+				System.out.println("Player z = " + z);
 				updatePhysics();
 				update();
 				
@@ -133,6 +135,9 @@ public class Player extends MovingComponent {
 	public void decreaseHP(){
 		System.out.println(health -1);
 		health--;
+	}
+	public int getZ(){
+		return z;
 	}
 	
 }

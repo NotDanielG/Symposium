@@ -20,12 +20,14 @@ public class Platform extends MovingComponent implements Collidable , Action{
 	private boolean load;
 	private BufferedImage buff;
 	private Action action;
+	private int z;
 	public Platform(int x, int y, int w, int h, int z, String picture) {
 		super(x, y, w, h);
 		imageSrc = picture;
 		loadImage();
 		setPosx(x);
 		setPosy(y);
+		this.z = z;
 	}
 	private void loadImage() {
 		try{
@@ -73,11 +75,14 @@ public class Platform extends MovingComponent implements Collidable , Action{
 	public void update(Graphics2D g){
 		if(load){
 			image = (Image) buff;
+			Player player = Start.screen.getPlayer();
 			g.drawImage(image,0,0 , getWidth(), getHeight(), 0, 0, image.getWidth(null), image.getHeight(null),
 					null);
-			setPosx(getPosx() + getVx());
+			setPosx(getVx()- (player.getZ() - z));
 			setPosy(getPosy() + getVy());
 			super.setX((int) getPosx());
+			
+			System.out.println((player.getZ() - z));
 			super.setY((int) getPosy());
 		}
 	}

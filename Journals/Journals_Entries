@@ -61,4 +61,9 @@ Task done:
 Did the basics for the Enemy and the EnemyAttack. Gave each of the class their own respective
 shape.Debugged the player class so that the cube doesn't jitter around on the platform. All the
 basic classes should be finished for now. Rest of the week should be figuring out the issue
-with the platform sometimes having a nullpointerexception error and the side scoll.
+with the platform sometimes having a nullpointerexception error and the side scroll.
+05/17/17
+Task done:
+Got the platforms to move when the player moves. I can move the same equation from the platform
+to the other classes of Enemy/EnemyAttack. Now should be putting everything into an arraylist
+and adding animation/frames.
