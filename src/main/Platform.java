@@ -82,6 +82,7 @@ public class Platform extends MovingComponent implements Collidable , Action{
 			setPosy(getPosy() + getVy());
 			super.setX((int) getPosx());
 			
+			
 			System.out.println((player.getZ() - z));
 			super.setY((int) getPosy());
 		}
