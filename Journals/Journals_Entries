@@ -61,9 +61,17 @@ Task done:
 Did the basics for the Enemy and the EnemyAttack. Gave each of the class their own respective
 shape.Debugged the player class so that the cube doesn't jitter around on the platform. All the
 basic classes should be finished for now. Rest of the week should be figuring out the issue
-with the platform sometimes having a nullpointerexception error and the side scroll.
+with the platform sometimes having a NullExceptionError error and the side scroll.
 05/17/17
 Task done:
 Got the platforms to move when the player moves. I can move the same equation from the platform
-to the other classes of Enemy/EnemyAttack. Now should be putting everything into an arraylist
+to the other classes of Enemy/EnemyAttack. Now should be putting everything into an ArrayList
 and adding animation/frames.
+05/22/17
+Task done;
+Got the player's X position on the screen to be stationary, but its "z" value will change once
+you press a or d. Fixed the NullExceptionError that was occurring within the platform class. 
+Added new two new ArrayList to store int values and a 2D array for the platforms. I am planning
+for arrayPlatform[0] to hold all the platforms from z values 0-800, 1 would be from 801-1600,
+etc. Tomorrow task is to actually implement the above statement or complete the PlayerAttack
+class.

@@ -19,12 +19,17 @@ public class ScreenGame extends Screen implements KeyListener, MouseListener,Run
 	private boolean gameRunning;
 	private Player player;
 	private List<Key> keyCommands;
+	private List<Platform> platforms;
+	private Platform[][] arrayP;
+	private List<Integer> zList;
+	private List<Integer> yList;
 	
 	private int currentSection;
 	
 	
 	public ScreenGame(int width, int height) {
 		super(width, height);
+		arrayP = new Platform[1][3];
 		gameRunning = true;
 		Thread x = new Thread(this);
 		x.start();
@@ -36,41 +41,29 @@ public class ScreenGame extends Screen implements KeyListener, MouseListener,Run
 		keyCommands = new ArrayList<Key>();
 		player = new Player(400,300,50,50, "resources/square.png");
 		viewObjects.add(player);
+		player.play();
 		
-		Platform z = new Platform(350,450, 400, 30, 250, "resources/platform.png");
-		z.setAction(new Action(){
-			public void act() {
-				getPlayer().hitGround((int)z.getY() - player.getHeight());
-				getPlayer().setStart(System.currentTimeMillis());
-				getPlayer().setPlatform(z);
-			}
-		});
-		viewObjects.add(z);
-		z.play();
-		
-		Platform p1 = new Platform(10,570, 500, 30, 500, "resources/platform.png");
-		p1.setAction(new Action(){
-			public void act() {
-				getPlayer().hitGround((int)p1.getY() - player.getHeight());
-				getPlayer().setStart(System.currentTimeMillis());
-				getPlayer().setPlatform(p1);
-			}
-		});
-		viewObjects.add(p1);
-		p1.play();
-		
-		Platform p2 = new Platform(10,570, 500, 30, 1200, "resources/platform.png");
-		p2.setAction(new Action(){
-			public void act() {
-				getPlayer().hitGround((int)p2.getY() - player.getHeight());
-				getPlayer().setStart(System.currentTimeMillis());
-				getPlayer().setPlatform(p2);
-			}
-		});
-		viewObjects.add(p2);
-		p2.play();
-		
-		
+//		Platform z = new Platform(350,450, 400, 30, 250, "resources/platform.png");
+//		z.setAction(new Action(){
+//			public void act() {
+//				getPlayer().hitGround((int)z.getY() - player.getHeight());
+//				getPlayer().setStart(System.currentTimeMillis());
+//				getPlayer().setPlatform(z);
+//			}
+//		});
+//		viewObjects.add(z);
+//		z.play();
+//		
+//		Platform p1 = new Platform(10,570, 500, 30, 500, "resources/platform.png");
+//		p1.setAction(new Action(){
+//			public void act() {
+//				getPlayer().hitGround((int)p1.getY() - player.getHeight());
+//				getPlayer().setStart(System.currentTimeMillis());
+//				getPlayer().setPlatform(p1);
+//			}
+//		});
+//		viewObjects.add(p1);
+//		p1.play();
 		
 //		Enemy e = new Enemy(450,350,50,50, 450, "resources/triangle.png");
 //		e.setAction(new Action(){
@@ -81,7 +74,48 @@ public class ScreenGame extends Screen implements KeyListener, MouseListener,Run
 //		viewObjects.add(e);
 //		e.play();
 	}
-
+	public void run() {
+		stuff = Collections.synchronizedList(new ArrayList<Enemy>());
+		platforms = Collections.synchronizedList(new ArrayList<Platform>());
+		keyCommands = Collections.synchronizedList(new ArrayList<Key>());
+		
+		zList = Collections.synchronizedList(new ArrayList<Integer>());
+		yList = Collections.synchronizedList(new ArrayList<Integer>());
+		
+		zList.add(250);
+		zList.add(500);
+		zList.add(1200);
+		
+		yList.add(450);
+		yList.add(570);
+		yList.add(570);
+		
+		for(int i = 0; i < zList.size(); i++){
+			Platform platform = new Platform(10,yList.get(i), 500, 30, zList.get(i), "resources/platform.png");
+			platform.setAction(new Action(){
+				public void act() {
+					getPlayer().hitGround((int)platform.getY() - player.getHeight());
+					getPlayer().setStart(System.currentTimeMillis());
+					getPlayer().setPlatform(platform);
+				}
+			});
+			platforms.add(platform);
+			arrayP[0][i] = platform;
+			addObject(platform);
+			platform.play();
+			
+		}
+		while(gameRunning){
+			try {
+				Thread.sleep(20);
+				checkButtonList();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+		}
+	}
 	@Override
 	public KeyListener getKeyListener(){
 		return this;
@@ -106,7 +140,7 @@ public class ScreenGame extends Screen implements KeyListener, MouseListener,Run
 				key.setCode(keyCode);
 				key.setAction(new Action(){
 					public void act(){
-						player.setX(player.getX() + getPlayer().getAcceleration());
+						player.setZ(player.getZ() + getPlayer().getAcceleration());
 					}
 				});
 				keyCommands.add(key);
@@ -115,7 +149,7 @@ public class ScreenGame extends Screen implements KeyListener, MouseListener,Run
 				key.setCode(keyCode);
 				key.setAction(new Action(){
 					public void act(){
-						player.setX(player.getX() - getPlayer().getAcceleration());
+						player.setZ(player.getZ() - getPlayer().getAcceleration());
 					}
 				});
 				keyCommands.add(key);
@@ -138,30 +172,11 @@ public class ScreenGame extends Screen implements KeyListener, MouseListener,Run
 
 	@Override
 	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
 		
 	}
 	public Player getPlayer(){
 		return player;
 	}
-	@Override
-	public void run() {
-		stuff = Collections.synchronizedList(new ArrayList<Enemy>());
-		
-		keyCommands = Collections.synchronizedList(new ArrayList<Key>());
-		
-		while(gameRunning){
-			try {
-				Thread.sleep(20);
-				checkButtonList();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
-		}
-	}
-
 	private void checkButtonList() {
 		for(Key key: keyCommands){
 			key.act();

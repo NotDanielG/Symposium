@@ -21,6 +21,8 @@ public class Platform extends MovingComponent implements Collidable , Action{
 	private BufferedImage buff;
 	private Action action;
 	private int z;
+	private int result;
+	private Player player;
 	public Platform(int x, int y, int w, int h, int z, String picture) {
 		super(x, y, w, h);
 		imageSrc = picture;
@@ -46,6 +48,8 @@ public class Platform extends MovingComponent implements Collidable , Action{
 		while(isRunning()){
 			try {
 				Thread.sleep(REFRESH_RATE);
+				player = Start.screen.getPlayer();
+				result = player.getZ() - this.z;
 				if(isCollided()){
 					act();
 				}
@@ -57,10 +61,10 @@ public class Platform extends MovingComponent implements Collidable , Action{
 	}
 	@Override
 	public boolean isCollided() {
-		Player player = Start.screen.getPlayer();
-		if(player.getVy() > 0 && player.getY() + player.getHeight() + player.findSpeed() > getY()
-				&& player.getY() + player.getHeight() +player.findSpeed() < getY() + getHeight()
-				&&(leftCorner(player) || rightCorner(player))){
+		if(player.getVy() > 0 
+			&& player.getY() + player.getHeight() > getY()
+			&& player.getY() + player.getHeight() < getY() + getHeight()
+			&&(leftCorner(player) || rightCorner(player))){
 			return true;
 		}
 		return false;
@@ -75,14 +79,12 @@ public class Platform extends MovingComponent implements Collidable , Action{
 	public void update(Graphics2D g){
 		if(load){
 			image = (Image) buff;
-			Player player = Start.screen.getPlayer();
 			g.drawImage(image,0,0 , getWidth(), getHeight(), 0, 0, image.getWidth(null), image.getHeight(null),
 					null);
-			setPosx(getVx()- (player.getZ() - z));
+			setPosx(getVx() -result);
 			setPosy(getPosy() + getVy());
 			super.setX((int) getPosx());
 			
-			System.out.println((player.getZ() - z));
 			super.setY((int) getPosy());
 		}
 	}

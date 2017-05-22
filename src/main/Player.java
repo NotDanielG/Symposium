@@ -52,7 +52,6 @@ public class Player extends MovingComponent {
 			load = true;
 			update();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -66,7 +65,7 @@ public class Player extends MovingComponent {
 			setPosy(getPosy() + getVy());
 			super.setY((int) getPosy());
 			
-			setPosx(getPosx() + getVx());
+//			setPosx(getPosx() + getVx());
 			super.setX((int) getPosx());
 		}
 	}
@@ -83,8 +82,7 @@ public class Player extends MovingComponent {
 					}
 				}
 				
-				z = (int) getPosx();
-				System.out.println("Player z = " + z);
+				
 				updatePhysics();
 				update();
 				
@@ -140,6 +138,9 @@ public class Player extends MovingComponent {
 	}
 	public int getZ(){
 		return z;
+	}
+	public void setZ(int z){
+		this.z = z;
 	}
 	
 }
