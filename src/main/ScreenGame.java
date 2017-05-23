@@ -29,7 +29,7 @@ public class ScreenGame extends Screen implements KeyListener, MouseListener,Run
 	
 	public ScreenGame(int width, int height) {
 		super(width, height);
-		arrayP = new Platform[1][3];
+		arrayP = new Platform[4][4];
 		gameRunning = true;
 		Thread x = new Thread(this);
 		x.start();
@@ -81,29 +81,34 @@ public class ScreenGame extends Screen implements KeyListener, MouseListener,Run
 		
 		zList = Collections.synchronizedList(new ArrayList<Integer>());
 		yList = Collections.synchronizedList(new ArrayList<Integer>());
+		int z = 350;
+		int y = 450;
 		
-		zList.add(250);
-		zList.add(500);
-		zList.add(1200);
-		
-		yList.add(450);
-		yList.add(570);
-		yList.add(570);
-		
-		for(int i = 0; i < zList.size(); i++){
-			Platform platform = new Platform(10,yList.get(i), 500, 30, zList.get(i), "resources/platform.png");
-			platform.setAction(new Action(){
-				public void act() {
-					getPlayer().hitGround((int)platform.getY() - player.getHeight());
-					getPlayer().setStart(System.currentTimeMillis());
-					getPlayer().setPlatform(platform);
-				}
-			});
-			platforms.add(platform);
-			arrayP[0][i] = platform;
-			addObject(platform);
-			platform.play();
-			
+		for(int i = 0; i < 16; i++){
+			addToList(z,y);
+			z+=400;
+		}
+		int idx = 0;
+		for(int i = 0; i < arrayP.length; i++){
+			for(int j = 0; j < arrayP[i].length; j++){
+				Platform platform = new Platform(10,yList.get(idx), 200, 30, zList.get(idx), "resources/platform.png");
+				platform.setAction(new Action(){
+					public void act() {
+						getPlayer().hitGround((int)platform.getY() - player.getHeight());
+						getPlayer().setStart(System.currentTimeMillis());
+						getPlayer().setPlatform(platform);
+					}
+				});
+				
+				
+//				arrayP[zList.get(i)/800][i%4] = platform;
+				
+				addObject(platform);
+				platform.play();
+				idx++;
+//				remove(platform);
+				platform.setRunning(false);
+			}
 		}
 		while(gameRunning){
 			try {
@@ -119,6 +124,10 @@ public class ScreenGame extends Screen implements KeyListener, MouseListener,Run
 	@Override
 	public KeyListener getKeyListener(){
 		return this;
+	}
+	public void addToList(int z, int y){
+		zList.add(z);
+		yList.add(y);
 	}
 	public void keyPressed(KeyEvent e) {
 		int keyCode = e.getKeyCode();
@@ -154,7 +163,11 @@ public class ScreenGame extends Screen implements KeyListener, MouseListener,Run
 				});
 				keyCommands.add(key);
 				break;
+			case KeyEvent.VK_SPACE:
+				
 			}
+			
+				
 		}
 		
 	}

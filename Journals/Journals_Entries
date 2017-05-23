@@ -75,3 +75,8 @@ Added new two new ArrayList to store int values and a 2D array for the platforms
 for arrayPlatform[0] to hold all the platforms from z values 0-800, 1 would be from 801-1600,
 etc. Tomorrow task is to actually implement the above statement or complete the PlayerAttack
 class.
+05/23/17
+Task done:
+Testing out the array of Platforms. This week should be figuring out how to load the areas. So
+if you are in area 2, then Areas 1,2,3 should be loaded. Added some of the basic methods
+and variables for the PlayerAttack class in the Player class and the ScreenGame class.

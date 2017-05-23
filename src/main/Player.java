@@ -21,6 +21,8 @@ public class Player extends MovingComponent {
 	private boolean load;
 	private boolean jump;
 	private long start;
+	private long attackRate;
+	private long lastAttack;
 	
 	private int z;
 	private int acceleration;
@@ -28,17 +30,20 @@ public class Player extends MovingComponent {
 	private int health;
 	private double grav;
 	
+	
 	public Player(int x, int y,int w ,int h,String photo) {
 		super(x, y, w, h);
 		start = System.currentTimeMillis();
+		attackRate = 500;
+		
 		platform = null;
 		imageSrc = photo;
+		
 		z = x;
 		initialyV = 0;
 		acceleration = 5;
-		grav = 1.0;
+		grav = 1;
 		health = 3;
-		
 		
 		setPosx(x);
 		setPosy(y);
@@ -81,8 +86,6 @@ public class Player extends MovingComponent {
 						platform = null;
 					}
 				}
-				
-				
 				updatePhysics();
 				update();
 				
@@ -90,17 +93,14 @@ public class Player extends MovingComponent {
 				e.printStackTrace();
 			}
 		}
-		
-		
 	}
+	
 	private void updatePhysics(){
 		if(load){
 			if(platform == null){
 				super.setVy(-findSpeed());
 			}
 		}
-		
-		
 	}
 	public int getAcceleration(){
 		return acceleration;
@@ -142,5 +142,11 @@ public class Player extends MovingComponent {
 	public void setZ(int z){
 		this.z = z;
 	}
+	public void createAttack(){
+		if(System.currentTimeMillis() - lastAttack > attackRate){
+			
+		}
+	}
+	
 	
 }
