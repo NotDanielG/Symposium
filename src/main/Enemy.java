@@ -21,10 +21,12 @@ public class Enemy extends MovingComponent implements Action{
 	private Image image;
 	private Action action;
 	private BufferedImage buff;
+	private Player player;
 	
 	private int w;
 	private int h;
 	private int z;
+	private double result;
 	private long lastAttack;
 	private long attackRate;
 	
@@ -39,8 +41,10 @@ public class Enemy extends MovingComponent implements Action{
 		this.z = z;
 		attackRate = 3000;
 		damaged = false;
+		
 		setPosx(x);
 		setPosy(y);
+		
 		lastAttack = System.currentTimeMillis();
 		loadImage();
 	}
@@ -63,7 +67,7 @@ public class Enemy extends MovingComponent implements Action{
 			setPosy(getPosy() + getVy());
 			super.setY((int) getPosy());
 			
-			setPosx(getPosx() + getVx());
+			setPosx(getVy() - result);
 			super.setX((int) getPosx());
 		}
 	}
@@ -72,6 +76,8 @@ public class Enemy extends MovingComponent implements Action{
 		while (isRunning()) {
 			try {
 				Thread.sleep(REFRESH_RATE);
+				player = Start.screen.getPlayer();
+				result = player.getZ() - this.z;
 				checkAction();
 				update();
 			} catch (InterruptedException e) {
@@ -86,7 +92,7 @@ public class Enemy extends MovingComponent implements Action{
 		}
 		long current = System.currentTimeMillis();
 		if(current - lastAttack >= attackRate){
-			EnemyAttack atk = new EnemyAttack(getX(), (getY() + getHeight()/2) - 10, 30,30,
+			EnemyAttack atk = new EnemyAttack((int)getPosx(), (getY() + getHeight()/2) - 10, 30,30,
 			-1.0, "resources/circle.png");
 			atk.setAction(new Action(){
 				public void act(){

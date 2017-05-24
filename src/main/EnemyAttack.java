@@ -15,12 +15,16 @@ public class EnemyAttack extends MovingComponent {
 	private String imageSrc;
 	private BufferedImage buff;
 	private Action action;
+	private Player player;
+	private int z;
+	private double result;
 	private boolean load;
 	
 	public EnemyAttack(int x, int y, int w, int h, double vx, String photo) {
 		super(x, y, w, h);
 		imageSrc = photo;
 		loadImage();
+		z = x;
 		setPosx(x);
 		setPosy(y);
 		super.setVx(vx);
@@ -44,8 +48,9 @@ public class EnemyAttack extends MovingComponent {
 			setPosy(getPosy() + getVy());
 			super.setY((int) getPosy()); 
 			
-			setPosx(getPosx() + getVx());
+			setPosx(result + getVx());
 			super.setX((int) getPosx());
+			
 			if(isCollided()){
 				action.act();
 				setRunning(false);
@@ -63,6 +68,9 @@ public class EnemyAttack extends MovingComponent {
 		while(isRunning()){
 			try{
 				Thread.sleep(REFRESH_RATE);
+				player = Start.screen.getPlayer();
+				result = player.getZ() - this.z;
+				//Assuming stationary, change to accommodate that this class is moving
 				update();
 			}
 			catch(Exception e){

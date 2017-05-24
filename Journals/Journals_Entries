@@ -80,3 +80,8 @@ Task done:
 Testing out the array of Platforms. This week should be figuring out how to load the areas. So
 if you are in area 2, then Areas 1,2,3 should be loaded. Added some of the basic methods
 and variables for the PlayerAttack class in the Player class and the ScreenGame class.
+05/24/17
+Task done:
+Finished the loading areas beyond your screen, like the example shown above. I accounted for 
+if you are if the first and last section. Tomorrow's task should be fixing the EnemyAttack
+class.
