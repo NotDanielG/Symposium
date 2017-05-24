@@ -50,6 +50,7 @@ public class EnemyAttack extends MovingComponent {
 			
 			setPosx(result + getVx());
 			super.setX((int) getPosx());
+			z = (int) (z + getVx());
 			
 			if(isCollided()){
 				action.act();
@@ -70,6 +71,7 @@ public class EnemyAttack extends MovingComponent {
 				Thread.sleep(REFRESH_RATE);
 				player = Start.screen.getPlayer();
 				result = player.getZ() - this.z;
+				
 				//Assuming stationary, change to accommodate that this class is moving
 				update();
 			}
