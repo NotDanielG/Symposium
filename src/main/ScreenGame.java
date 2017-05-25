@@ -126,11 +126,15 @@ public class ScreenGame extends Screen implements KeyListener, MouseListener,Run
 		if(previousSection > currentSection && !(previousSection + 2 > arrayP.length-1)){
 			for(int i = 0; i < 3; i++){
 				arrayP[previousSection+1][i].setRunning(false);
+				//Do it in the platform class;
+				//Add the remove
 			}
 		}
 		else{
-			for(int i = 0; i < 3; i++){
-				arrayP[previousSection-1][i].setRunning(false);
+			if(previousSection-1 >= 0){
+				for(int i = 0; i < 3; i++){
+					arrayP[previousSection-1][i].setRunning(false);
+				}
 			}
 		}
 		
