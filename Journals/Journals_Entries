@@ -85,3 +85,9 @@ Task done:
 Finished the loading areas beyond your screen, like the example shown above. I accounted for 
 if you are if the first and last section. Tomorrow's task should be fixing the EnemyAttack
 class.
+05/25/17
+Task done:
+Got the areas to load depending on the currentSection, fixed the EnemyAttack issue where its
+going towards the wrong side of the screen based on the Enemy's position relative to the
+player's position. Tomorrow should be fixing the platforms that are removed, yet are still
+'there'.

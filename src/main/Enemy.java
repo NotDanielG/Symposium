@@ -26,6 +26,8 @@ public class Enemy extends MovingComponent implements Action{
 	private int w;
 	private int h;
 	private int z;
+	private int side;
+	private double attackSpeed;
 	private double result;
 	private long lastAttack;
 	private long attackRate;
@@ -41,7 +43,7 @@ public class Enemy extends MovingComponent implements Action{
 		this.z = z;
 		attackRate = 3000;
 		damaged = false;
-		
+		attackSpeed = -1.0;
 		setPosx(x);
 		setPosy(y);
 		
@@ -66,7 +68,6 @@ public class Enemy extends MovingComponent implements Action{
 			
 			setPosy(getPosy() + getVy());
 			super.setY((int) getPosy());
-			
 			setPosx(getVy() - result);
 			super.setX((int) getPosx());
 		}
@@ -78,6 +79,16 @@ public class Enemy extends MovingComponent implements Action{
 				Thread.sleep(REFRESH_RATE);
 				player = Start.screen.getPlayer();
 				result = player.getZ() - this.z;
+				if(player.getZ()+300 > z && attackSpeed < 0){
+					attackSpeed*=-1;
+					side = getWidth();
+				}
+				else{
+					if(player.getZ()+300 < z && attackSpeed > 0){
+						attackSpeed*=-1;
+						side = 0;
+					}
+				}
 				checkAction();
 				update();
 			} catch (InterruptedException e) {
@@ -93,7 +104,7 @@ public class Enemy extends MovingComponent implements Action{
 		long current = System.currentTimeMillis();
 		if(current - lastAttack >= attackRate){
 			EnemyAttack atk = new EnemyAttack((int)getPosx(), (getY() + getHeight()/2) - 10, 30,30,
-			-1.0, "resources/circle.png");
+			attackSpeed, z+side,"resources/circle.png");
 			atk.setAction(new Action(){
 				public void act(){
 					Start.screen.getPlayer().decreaseHP();
@@ -103,8 +114,6 @@ public class Enemy extends MovingComponent implements Action{
 			Start.screen.addObject(atk);
 			lastAttack = current;
 		}
-		
-		
 	}
 	public boolean isCollided(){
 		Player player = Start.screen.getPlayer();

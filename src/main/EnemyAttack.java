@@ -20,11 +20,11 @@ public class EnemyAttack extends MovingComponent {
 	private double result;
 	private boolean load;
 	
-	public EnemyAttack(int x, int y, int w, int h, double vx, String photo) {
+	public EnemyAttack(int x, int y, int w, int h, double vx,int z ,String photo) {
 		super(x, y, w, h);
 		imageSrc = photo;
 		loadImage();
-		z = x;
+		this.z = z;;
 		setPosx(x);
 		setPosy(y);
 		super.setVx(vx);
@@ -46,8 +46,8 @@ public class EnemyAttack extends MovingComponent {
 					null);
 			
 			setPosy(getPosy() + getVy());
-			super.setY((int) getPosy()); 
-			
+			super.setY((int) getPosy());
+			result*= -1;
 			setPosx(result + getVx());
 			super.setX((int) getPosx());
 			z = (int) (z + getVx());
@@ -57,7 +57,7 @@ public class EnemyAttack extends MovingComponent {
 				setRunning(false);
 				Start.screen.remove(this);
 			}
-			if(getX() < -50){
+			if(getPosx() < -100){
 				setRunning(false);
 				Start.screen.remove(this);
 			}
@@ -72,7 +72,6 @@ public class EnemyAttack extends MovingComponent {
 				player = Start.screen.getPlayer();
 				result = player.getZ() - this.z;
 				
-				//Assuming stationary, change to accommodate that this class is moving
 				update();
 			}
 			catch(Exception e){

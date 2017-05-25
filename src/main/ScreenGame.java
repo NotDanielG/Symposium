@@ -15,11 +15,10 @@ import gui.components.Graphic;
 import gui.components.Visible;
 
 public class ScreenGame extends Screen implements KeyListener, MouseListener,Runnable{
-	private List<Enemy> stuff;
+	private Enemy[][] enemies;
 	private boolean gameRunning;
 	private Player player;
 	private List<Key> keyCommands;
-	private List<Platform> platforms;
 	private Platform[][] arrayP;
 	private List<Integer> zList;
 	private List<Integer> yList;
@@ -30,6 +29,7 @@ public class ScreenGame extends Screen implements KeyListener, MouseListener,Run
 	public ScreenGame(int width, int height) {
 		super(width, height);
 		arrayP = new Platform[5][3];
+		enemies = new Enemy[5][1];
 		gameRunning = true;
 		currentSection = 1;
 		Thread x = new Thread(this);
@@ -43,8 +43,7 @@ public class ScreenGame extends Screen implements KeyListener, MouseListener,Run
 		player.play();
 	}
 	public void run() {
-		stuff = Collections.synchronizedList(new ArrayList<Enemy>());
-		platforms = Collections.synchronizedList(new ArrayList<Platform>());
+		
 		keyCommands = Collections.synchronizedList(new ArrayList<Key>());
 		
 		zList = Collections.synchronizedList(new ArrayList<Integer>());
@@ -100,16 +99,20 @@ public class ScreenGame extends Screen implements KeyListener, MouseListener,Run
 				//currentSection * 800 = lower limit
 				//currenSection +1 * 800 = upper limit
 				
-				if(player.getZ() < currentSection * 800 - 400){
+				if(player.getZ()+300 < currentSection * 800 - 400){
 					currentSection--;
 					loadSections(currentSection + 1);
 				}
 				else{
-					if(player.getZ() > (currentSection + 1) * 800 - 400){
+					if(player.getZ()+300 > (currentSection + 1) * 800 - 400){
 						currentSection++;
 						loadSections(currentSection - 1);
 					}
 				}
+				for(int i = 0; i < arrayP.length;i++){
+					System.out.println(i+ " : " + arrayP[i][0].isRunning());
+				}
+				
 				
 				checkButtonList();
 			} catch (InterruptedException e) {
@@ -120,6 +123,17 @@ public class ScreenGame extends Screen implements KeyListener, MouseListener,Run
 		}
 	}
 	private void loadSections(int previousSection) {
+		if(previousSection > currentSection && !(previousSection + 2 > arrayP.length-1)){
+			for(int i = 0; i < 3; i++){
+				arrayP[previousSection+1][i].setRunning(false);
+			}
+		}
+		else{
+			for(int i = 0; i < 3; i++){
+				arrayP[previousSection-1][i].setRunning(false);
+			}
+		}
+		
 		if(currentSection <= 0){
 			for(int a = 0; a < 2; a++){
 				for(int b = 0; b < arrayP[0].length; b++){
