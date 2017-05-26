@@ -24,7 +24,7 @@ public class EnemyAttack extends MovingComponent {
 		super(x, y, w, h);
 		imageSrc = photo;
 		loadImage();
-		this.z = z;;
+		this.z = z;
 		setPosx(x);
 		setPosy(y);
 		super.setVx(vx);
@@ -88,33 +88,35 @@ public class EnemyAttack extends MovingComponent {
 		return false;
 	}
 	public boolean lowerRight(Player player){
-		if(player.getX() + player.getWidth() > getX() && 
-	       player.getX() + player.getWidth() < getX() + getWidth() &&
-	       player.getY() + player.getHeight() > getY() &&
-	       player.getY() + player.getHeight() < getY() + getHeight()){
+		if(getX() + getWidth() > player.getX() && 
+	       getX() + getWidth() < player.getX() + player.getWidth() &&
+	       getY() + getHeight() > player.getY() &&
+	       getY() + getHeight() < player.getY() + player.getHeight()){
 			return true;
 		}
 		return false;
 	}
 	public boolean lowerLeft(Player player){
-		if(player.getX() > getX() && player.getX() < getX() + getWidth() &&
-		   player.getY() + player.getHeight() > getY() && 
-		   player.getY() + player.getHeight() < getY() + getHeight()){
+		if(getX() > player.getX() && 
+		   getX() < player.getX() + player.getWidth() &&
+		   getY() + getHeight() > player.getY() && 
+		   getY() + getHeight() < player.getY() + player.getHeight()){
 			return true;
 		}
 		return false;
 	}
 	public boolean upperRight(Player player){
-		if(player.getX() + player.getWidth() > getX() && 
-		   player.getX() + player.getWidth() < getX() + getWidth() &&
-		   player.getY() > getY() && player.getY() < getY() + getHeight()){
+		if(getX() + getWidth() > player.getX() && 
+		   getX() + getWidth() < player.getX() + player.getWidth() &&
+		   getY() > player.getY() && 
+		   getY() < player.getY() + player.getHeight()){
 			return true;
 		}
 		return false;
 	}
 	public boolean upperLeft(Player player){
-		if(player.getX() > getX() && player.getX() < getX() + getWidth()
-		&& player.getY() > getY() && player.getY() < getY() + getHeight()){
+		if(getX() > player.getX() && getX() < player.getX() + player.getWidth()
+		&& getY() > player.getY() && getY() < player.getY() + player.getHeight()){
 			return true;
 		}
 		return false;
@@ -125,5 +127,4 @@ public class EnemyAttack extends MovingComponent {
 	public void setAction(Action action){
 		this.action = action;
 	}
-
 }

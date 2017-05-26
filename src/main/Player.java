@@ -144,7 +144,10 @@ public class Player extends MovingComponent {
 	}
 	public void createAttack(){
 		if(System.currentTimeMillis() - lastAttack > attackRate){
-			
+			PlayerAttack attack = new PlayerAttack(10, getY(), 50,50,2.0, z + 50,"resources/triangle.png");
+			Start.screen.addObject(attack);
+			attack.play();
+			lastAttack = System.currentTimeMillis();
 		}
 	}
 	

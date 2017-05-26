@@ -91,3 +91,8 @@ Got the areas to load depending on the currentSection, fixed the EnemyAttack iss
 going towards the wrong side of the screen based on the Enemy's position relative to the
 player's position. Tomorrow should be fixing the platforms that are removed, yet are still
 'there'.
+05/26/17
+Task done:
+Decided not to remove the platform thing, it should be fine as it is. Fixed the EnemyAttack
+hit reg. Added new variables + their respective getters/setters for them. Currently doing the
+playerattack, which is not appearing.
