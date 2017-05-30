@@ -29,9 +29,9 @@ public class ScreenGame extends Screen implements KeyListener, MouseListener,Run
 	public ScreenGame(int width, int height) {
 		super(width, height);
 		arrayP = new Platform[5][3];
-		enemies = new Enemy[1][1];
+		enemies = new Enemy[5][1];
 		gameRunning = true;
-		currentSection = 1;
+		currentSection = 0;
 		Thread x = new Thread(this);
 		x.start();
 	}
@@ -49,7 +49,8 @@ public class ScreenGame extends Screen implements KeyListener, MouseListener,Run
 		zList = Collections.synchronizedList(new ArrayList<Integer>());
 		yList = Collections.synchronizedList(new ArrayList<Integer>());
 		
-		int z = 100;
+//		int z = 100;
+		int z = 350;
 		int y = 450;
 		for(int i = 0; i < arrayP.length*arrayP[0].length; i++){
 			addToList(z,y);
@@ -58,19 +59,21 @@ public class ScreenGame extends Screen implements KeyListener, MouseListener,Run
 		int idx = 0;
 		for(int i = 0; i < arrayP.length; i++){
 			for(int j = 0; j < arrayP[i].length; j++){
+				
 				Platform platform = new Platform(10,yList.get(idx), 100, 30, zList.get(idx), "resources/platform.png");
 				platform.setAction(new Action(){
 					public void act() {
 						getPlayer().hitGround((int)platform.getY() - player.getHeight());
 						getPlayer().setStart(System.currentTimeMillis());
 						getPlayer().setPlatform(platform);
+						System.out.println(platform.getZ());
 					}
 				});
 				
 				arrayP[i][j] = platform;
 				addObject(platform);
 				idx++;
-				if(j == 1 && i ==0){
+				if(j == 1){
 					Enemy enemy = new Enemy(10,yList.get(idx) - 50, 50,50,
 							zList.get(idx) + 50,"resources/triangle.png");
 					enemy.setAction(new Action(){
@@ -79,7 +82,7 @@ public class ScreenGame extends Screen implements KeyListener, MouseListener,Run
 						}
 					});
 					addObject(enemy);
-//					enemies[i][0] = enemy;
+					enemies[i][0] = enemy;
 					enemy.play();
 				
 				
@@ -88,7 +91,7 @@ public class ScreenGame extends Screen implements KeyListener, MouseListener,Run
 				}
 			}
 		}
-		for(int i = 0; i < 2;i++){
+		for(int i = 0; i < 3;i++){
 			for(int j = 0; j < arrayP[0].length;j++){
 				arrayP[i][j].play();
 			}
@@ -190,12 +193,14 @@ public class ScreenGame extends Screen implements KeyListener, MouseListener,Run
 				}
 				break;
 			case KeyEvent.VK_D:
+				
 				key.setCode(keyCode);
 				key.setAction(new Action(){
 					public void act(){
 						player.setZ(player.getZ() + getPlayer().getAcceleration());
 					}
 				});
+				player.setDirection(1);
 				keyCommands.add(key);
 				break;
 			case KeyEvent.VK_A:
@@ -205,10 +210,12 @@ public class ScreenGame extends Screen implements KeyListener, MouseListener,Run
 						player.setZ(player.getZ() - getPlayer().getAcceleration());
 					}
 				});
+				player.setDirection(-1);
 				keyCommands.add(key);
 				break;
 			case KeyEvent.VK_SPACE:
 				player.createAttack();
+				
 			}
 			
 				
@@ -216,7 +223,7 @@ public class ScreenGame extends Screen implements KeyListener, MouseListener,Run
 		
 	}
 	public Platform createPlatform(int y, int z){
-		Platform platform = new Platform(10,y, 200, 30, z, "resources/platform.png");
+		Platform platform = new Platform(10,y, 200, 100, z, "resources/platform.png");
 		platform.setAction(new Action(){
 			public void act() {
 				getPlayer().hitGround((int)platform.getY() - player.getHeight());
@@ -294,8 +301,10 @@ public class ScreenGame extends Screen implements KeyListener, MouseListener,Run
 		// TODO Auto-generated method stub
 		
 	}
+	public int getCurrentSection(){
+		return currentSection;
+	}
 	public Enemy[][] getEnemies() {
-		
 		return enemies;
 	}
 }

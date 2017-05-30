@@ -24,9 +24,11 @@ public class Player extends MovingComponent {
 	private long attackRate;
 	private long lastAttack;
 	
+	private int direction;
 	private int z;
 	private int acceleration;
 	private int initialyV;
+	private double initialxV;
 	private int health;
 	private double grav;
 	
@@ -41,9 +43,11 @@ public class Player extends MovingComponent {
 		
 		z = x;
 		initialyV = 0;
+		initialxV = 2.0;
 		acceleration = 5;
 		grav = 1;
 		health = 3;
+		direction = 1;
 		
 		setPosx(x);
 		setPosy(y);
@@ -144,12 +148,15 @@ public class Player extends MovingComponent {
 	}
 	public void createAttack(){
 		if(System.currentTimeMillis() - lastAttack > attackRate){
-			PlayerAttack attack = new PlayerAttack(10, getY(), 50,50,2.0, z + 50,"resources/triangle.png");
+			PlayerAttack attack = new PlayerAttack(getX(), getY(), 50,50,direction*initialxV,
+			z+350+(direction*(50)),"resources/triangle.png");
 			Start.screen.addObject(attack);
 			attack.play();
 			lastAttack = System.currentTimeMillis();
 		}
 	}
-	
+	public void setDirection(int x){
+		direction = (int) ((x*initialxV)/initialxV);
+	}
 	
 }

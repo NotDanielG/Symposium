@@ -19,14 +19,15 @@ public class PlayerAttack extends MovingComponent {
 	private int z;
 	private double result;
 	private boolean load;
-	private Enemy[][] enemies;
+	private Enemy enemy;
+	
 	
 	public PlayerAttack(int x, int y, int w, int h, double vx,int z ,String photo) {
 		super(x, y, w, h);
 		imageSrc = photo;
+		
 		loadImage();
 		this.z = z;
-		setPosx(x);
 		setPosy(y);
 		super.setVx(vx);
 		super.setVy(0);
@@ -34,7 +35,7 @@ public class PlayerAttack extends MovingComponent {
 	private void loadImage() {
 		try {
 			buff = ImageIO.read(new File(imageSrc));
-			enemies = Start.screen.getEnemies();
+			
 			load = true;
 			update();
 		} catch (IOException e) {
@@ -51,18 +52,10 @@ public class PlayerAttack extends MovingComponent {
 			super.setY((int) getPosy());
 			result*= -1;
 			setPosx(result + getVx());
+			
 			super.setX((int) getPosx());
 			z = (int) (z + getVx());
-			for(int i = 0; i < enemies.length;i++){
-				Enemy enemy = enemies[i][0];
-				if(isCollided(enemy)){
-//					action.act();
-					System.out.println("Hi");
-					setRunning(false);
-					Start.screen.remove(this);
-					i = enemies.length;
-				}
-			}
+			
 			if(getPosx() < -100){
 				setRunning(false);
 				Start.screen.remove(this);
@@ -76,7 +69,33 @@ public class PlayerAttack extends MovingComponent {
 				Thread.sleep(REFRESH_RATE);
 				player = Start.screen.getPlayer();
 				result = player.getZ() - this.z;
-				enemies = Start.screen.getEnemies();
+				
+				int section = Start.screen.getCurrentSection();
+				Enemy[][] e = Start.screen.getEnemies();
+				
+				if(section < 0){
+					section = 0;
+				}
+				else{
+					if(section >= e.length){
+						section = e.length - 1;
+					}
+				}
+				
+				if(e[section][0] != null){
+					enemy = e[section][0];
+				}
+				if(enemy != null){
+					if(isCollided(enemy)){
+						Start.screen.getEnemies()[section][0].setRunning(false);
+						Start.screen.remove(Start.screen.getEnemies()[section][0]);
+						Start.screen.getEnemies()[section][0] = null;
+						
+						setRunning(false);
+						Start.screen.remove(this);
+					}
+				}
+				
 				update();
 			}
 			catch(Exception e){
@@ -93,35 +112,35 @@ public class PlayerAttack extends MovingComponent {
 		return false;
 	}
 	public boolean lowerRight(Enemy enemy){
-		if(getX() + getWidth() > enemy.getX() && 
-	       getX() + getWidth() < enemy.getX() + enemy.getWidth() &&
-	       getY() + getHeight() > enemy.getY() &&
-	       getY() + getHeight() < enemy.getY() + enemy.getHeight()){
+		if(getX() + getWidth() >= enemy.getX() && 
+	       getX() + getWidth() <= enemy.getX() + enemy.getWidth() &&
+	       getY() + getHeight() >= enemy.getY() &&
+	       getY() + getHeight() <= enemy.getY() + enemy.getHeight()){
 			return true;
 		}
 		return false;
 	}
 	public boolean lowerLeft(Enemy enemy){
-		if(getX() > enemy.getX() && 
-		   getX() < enemy.getX() + enemy.getWidth() &&
-		   getY() + getHeight() > enemy.getY() && 
-		   getY() + getHeight() < enemy.getY() + enemy.getHeight()){
+		if(getX() >= enemy.getX() && 
+		   getX() <= enemy.getX() + enemy.getWidth() &&
+		   getY() + getHeight() >= enemy.getY() && 
+		   getY() + getHeight() <= enemy.getY() + enemy.getHeight()){
 			return true;
 		}
 		return false;
 	}
 	public boolean upperRight(Enemy enemy){
-		if(getX() + getWidth() > enemy.getX() && 
-		   getX() + getWidth() < enemy.getX() + enemy.getWidth() &&
-		   getY() > enemy.getY() && 
-		   getY() < enemy.getY() + enemy.getHeight()){
+		if(getX() + getWidth() >= enemy.getX() && 
+		   getX() + getWidth() <= enemy.getX() + enemy.getWidth() &&
+		   getY() >= enemy.getY() && 
+		   getY() <= enemy.getY() + enemy.getHeight()){
 			return true;
 		}
 		return false;
 	}
 	public boolean upperLeft(Enemy enemy){
-		if(getX() > enemy.getX() && getX() < enemy.getX() + enemy.getWidth()
-		&& getY() > enemy.getY() && getY() < enemy.getY() + enemy.getHeight()){
+		if(getX() >= enemy.getX() && getX() <= enemy.getX() + enemy.getWidth()
+		&& getY() >= enemy.getY() && getY() <= enemy.getY() + enemy.getHeight()){
 			return true;
 		}
 		return false;

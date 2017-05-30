@@ -96,3 +96,8 @@ Task done:
 Decided not to remove the platform thing, it should be fine as it is. Fixed the EnemyAttack
 hit reg. Added new variables + their respective getters/setters for them. Currently doing the
 playerattack, which is not appearing.
+05/30/17
+Task done:
+Player now able to shoot out projectiles, that can hit the enemy. Both the enemy + player's
+attack disappear on impact. However, deciding on what enemy it can hit is kind of buggy.
+This week should be resolving the platform's placement and the issue mentioned above.

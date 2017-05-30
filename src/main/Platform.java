@@ -101,4 +101,7 @@ public class Platform extends MovingComponent implements Collidable , Action{
 		}
 		return false;
 	}
+	public int getZ() {
+		return z;
+	}
 }
