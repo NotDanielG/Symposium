@@ -223,7 +223,7 @@ public class ScreenGame extends Screen implements KeyListener, MouseListener,Run
 		
 	}
 	public Platform createPlatform(int y, int z){
-		Platform platform = new Platform(10,y, 200, 100, z, "resources/platform.png");
+		Platform platform = new Platform(50,y, 200, 200, z, "resources/platform.png");
 		platform.setAction(new Action(){
 			public void act() {
 				getPlayer().hitGround((int)platform.getY() - player.getHeight());

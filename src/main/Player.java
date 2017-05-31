@@ -36,7 +36,7 @@ public class Player extends MovingComponent {
 	public Player(int x, int y,int w ,int h,String photo) {
 		super(x, y, w, h);
 		start = System.currentTimeMillis();
-		attackRate = 500;
+		attackRate = 1000;
 		
 		platform = null;
 		imageSrc = photo;
@@ -44,7 +44,7 @@ public class Player extends MovingComponent {
 		z = x;
 		initialyV = 0;
 		initialxV = 2.0;
-		acceleration = 5;
+		acceleration = 3;
 		grav = 1;
 		health = 3;
 		direction = 1;
@@ -104,6 +104,11 @@ public class Player extends MovingComponent {
 			if(platform == null){
 				super.setVy(-findSpeed());
 			}
+		}
+		if(getPosy() > 900){
+			setVy(-5);
+			setZ(450);
+			setPosy(300);
 		}
 	}
 	public int getAcceleration(){

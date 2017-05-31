@@ -101,3 +101,9 @@ Task done:
 Player now able to shoot out projectiles, that can hit the enemy. Both the enemy + player's
 attack disappear on impact. However, deciding on what enemy it can hit is kind of buggy.
 This week should be resolving the platform's placement and the issue mentioned above.
+05/31/17
+Task done:
+Better hit detection that loops through all the enemies, tomorrow could be making it more
+efficient so that it operates similarly like the platforms, in which it runs only when you
+are in the section or at certain zones. Tomorrow should be fixing platform placement and maybe
+adding enemy movement.

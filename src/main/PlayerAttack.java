@@ -85,14 +85,16 @@ public class PlayerAttack extends MovingComponent {
 				if(e[section][0] != null){
 					enemy = e[section][0];
 				}
-				if(enemy != null){
-					if(isCollided(enemy)){
-						Start.screen.getEnemies()[section][0].setRunning(false);
-						Start.screen.remove(Start.screen.getEnemies()[section][0]);
-						Start.screen.getEnemies()[section][0] = null;
-						
-						setRunning(false);
-						Start.screen.remove(this);
+				for(int i = 0; i <  e.length;i++){
+					if(e[i][0] !=null){
+						if(isCollided(e[i][0])){
+							Start.screen.getEnemies()[section][0].setRunning(false);
+							Start.screen.remove(Start.screen.getEnemies()[section][0]);
+							Start.screen.getEnemies()[section][0] = null;
+							
+							setRunning(false);
+							Start.screen.remove(this);
+						}
 					}
 				}
 				
