@@ -43,7 +43,7 @@ public class Player extends MovingComponent {
 		
 		z = x;
 		initialyV = 0;
-		initialxV = 2.0;
+		initialxV = 6.0;
 		acceleration = 3;
 		grav = 1;
 		health = 3;
@@ -142,7 +142,6 @@ public class Player extends MovingComponent {
 		setVy(0);
 	}
 	public void decreaseHP(){
-		System.out.println(health -1);
 		health--;
 	}
 	public int getZ(){

@@ -1,10 +1,15 @@
 package main;
 
 import java.awt.Graphics2D;
+
 import java.awt.Image;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 
@@ -17,15 +22,25 @@ public class PlayerAttack extends MovingComponent {
 	private Action action;
 	private Player player;
 	private int z;
+	private int idx;
 	private double result;
 	private boolean load;
-	private Enemy enemy;
+	private boolean hit;
+	
+	
+	private List<BufferedImage> frames;
+	private long lastChange;
+	private long turnRate;
 	
 	
 	public PlayerAttack(int x, int y, int w, int h, double vx,int z ,String photo) {
-		super(x, y, w, h);
+		super(x, y, 16, 12);
 		imageSrc = photo;
 		
+		idx = 1;
+		
+		frames = new ArrayList<BufferedImage>();
+		turnRate = 200;
 		loadImage();
 		this.z = z;
 		setPosy(y);
@@ -34,9 +49,21 @@ public class PlayerAttack extends MovingComponent {
 	}
 	private void loadImage() {
 		try {
-			buff = ImageIO.read(new File(imageSrc));
-			
 			load = true;
+			
+			BufferedImage sheet= ImageIO.read(new File("resources/bullets.png")); 
+			BufferedImage image1 = sheet.getSubimage(7, 12, 8, 6);
+			BufferedImage image2 = sheet.getSubimage(21, 9, 12, 12);
+			BufferedImage image3 = sheet.getSubimage(38, 8, 13, 13);
+			BufferedImage image4 = sheet.getSubimage(56, 7, 15, 15);
+			
+			frames.add(image1);
+			frames.add(image2);
+			frames.add(image3);
+			frames.add(image4);
+			
+			buff = frames.get(0);
+			
 			update();
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -44,9 +71,21 @@ public class PlayerAttack extends MovingComponent {
 	}
 	public void update(Graphics2D g){
 		if(load){
+//			g.drawImage(image,0,0 , getWidth(), getHeight(), 0, 0, image.getWidth(null), image.getHeight(null),
+//					null);
+			
+			AffineTransform tx = AffineTransform.getScaleInstance(-1, 1);
+			tx.translate(-(frames.get(idx)).getWidth(null), 0);
+			
+			AffineTransformOp op = new AffineTransformOp(tx, 
+					 AffineTransformOp.TYPE_NEAREST_NEIGHBOR); 
+			buff = op.filter(buff, null);
+			
 			Image image = (Image) buff;
-			g.drawImage(image,0,0 , getWidth(), getHeight(), 0, 0, image.getWidth(null), image.getHeight(null),
-					null);
+			g.drawImage(buff, op, getX(), getY());
+//			g.drawImage(image,0,0 , getWidth(), getHeight(), 0, 0, image.getWidth(null), image.getHeight(null),
+//			null);
+			
 			
 			setPosy(getPosy() + getVy());
 			super.setY((int) getPosy());
@@ -56,10 +95,11 @@ public class PlayerAttack extends MovingComponent {
 			super.setX((int) getPosx());
 			z = (int) (z + getVx());
 			
-			if(getPosx() < -100){
+			if(getPosx() < -100 || getPosx() > 800 || idx == 5){
 				setRunning(false);
 				Start.screen.remove(this);
 			}
+			
 		}
 	}
 	public void run(){
@@ -67,37 +107,39 @@ public class PlayerAttack extends MovingComponent {
 		while(isRunning()){
 			try{
 				Thread.sleep(REFRESH_RATE);
+				
 				player = Start.screen.getPlayer();
 				result = player.getZ() - this.z;
-				
-				int section = Start.screen.getCurrentSection();
-				Enemy[][] e = Start.screen.getEnemies();
-				
-				if(section < 0){
-					section = 0;
-				}
-				else{
-					if(section >= e.length){
-						section = e.length - 1;
-					}
-				}
-				
-				if(e[section][0] != null){
-					enemy = e[section][0];
-				}
-				for(int i = 0; i <  e.length;i++){
-					if(e[i][0] !=null){
-						if(isCollided(e[i][0])){
-							Start.screen.getEnemies()[section][0].setRunning(false);
-							Start.screen.remove(Start.screen.getEnemies()[section][0]);
-							Start.screen.getEnemies()[section][0] = null;
-							
-							setRunning(false);
-							Start.screen.remove(this);
+				if(!hit){	
+					Enemy[][] e = Start.screen.getEnemies();
+	
+					for(int i = 0; i <  e.length;i++){
+						if(e[i][0] !=null){
+							if(isCollided(e[i][0])){
+								hit = true;
+								Start.screen.getEnemies()[i][0].setRunning(false);
+								Start.screen.remove(Start.screen.getEnemies()[i][0]);
+								Start.screen.getEnemies()[i][0] = null;
+								
+								setVx(0);
+	//							Start.screen.remove(this);
+	//							setRunning(false); 
+								break;
+							}
 						}
 					}
 				}
 				
+				if(hit && idx < 5 && System.currentTimeMillis() - lastChange > turnRate ){
+					if(idx < 4){
+						buff = frames.get(idx);
+					}
+					clear();
+					lastChange = System.currentTimeMillis();
+					idx++;
+						
+					
+				}
 				update();
 			}
 			catch(Exception e){
@@ -106,7 +148,6 @@ public class PlayerAttack extends MovingComponent {
 		}
 	}
 	public boolean isCollided(Enemy enemy){
-		
 		if(lowerRight(enemy) || lowerLeft(enemy) || 
 		   upperRight(enemy) || upperLeft(enemy)){
 			return true;

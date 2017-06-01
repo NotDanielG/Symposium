@@ -20,6 +20,7 @@ public class ScreenGame extends Screen implements KeyListener, MouseListener,Run
 	private Player player;
 	private List<Key> keyCommands;
 	private Platform[][] arrayP;
+	private List<Platform> platforms;
 	private List<Integer> zList;
 	private List<Integer> yList;
 	
@@ -29,6 +30,7 @@ public class ScreenGame extends Screen implements KeyListener, MouseListener,Run
 	public ScreenGame(int width, int height) {
 		super(width, height);
 		arrayP = new Platform[5][3];
+		
 		enemies = new Enemy[5][1];
 		gameRunning = true;
 		currentSection = 0;
@@ -45,11 +47,11 @@ public class ScreenGame extends Screen implements KeyListener, MouseListener,Run
 	public void run() {
 		
 		keyCommands = Collections.synchronizedList(new ArrayList<Key>());
+		platforms = Collections.synchronizedList(new ArrayList<Platform>());
 		
 		zList = Collections.synchronizedList(new ArrayList<Integer>());
 		yList = Collections.synchronizedList(new ArrayList<Integer>());
 		
-//		int z = 100;
 		int z = 350;
 		int y = 450;
 		for(int i = 0; i < arrayP.length*arrayP[0].length; i++){
@@ -66,7 +68,6 @@ public class ScreenGame extends Screen implements KeyListener, MouseListener,Run
 						getPlayer().hitGround((int)platform.getY() - player.getHeight());
 						getPlayer().setStart(System.currentTimeMillis());
 						getPlayer().setPlatform(platform);
-						System.out.println(platform.getZ());
 					}
 				});
 				
@@ -84,10 +85,6 @@ public class ScreenGame extends Screen implements KeyListener, MouseListener,Run
 					addObject(enemy);
 					enemies[i][0] = enemy;
 					enemy.play();
-				
-				
-				
-				
 				}
 			}
 		}
@@ -101,7 +98,6 @@ public class ScreenGame extends Screen implements KeyListener, MouseListener,Run
 				Thread.sleep(20);
 				//currentSection * 800 = lower limit
 				//currenSection +1 * 800 = upper limit
-				
 				if(player.getZ()+300 < currentSection * 800 - 400){
 					currentSection--;
 					loadSections(currentSection + 1);
@@ -112,7 +108,6 @@ public class ScreenGame extends Screen implements KeyListener, MouseListener,Run
 						loadSections(currentSection - 1);
 					}
 				}
-				
 				
 				checkButtonList();
 			} catch (InterruptedException e) {
@@ -126,12 +121,18 @@ public class ScreenGame extends Screen implements KeyListener, MouseListener,Run
 		if(previousSection > currentSection && !(previousSection + 2 > arrayP.length-1)){
 			for(int i = 0; i < 3; i++){
 				arrayP[previousSection+1][i].setRunning(false);
+				if(enemies[previousSection+1][0] != null){
+					enemies[previousSection+1][0].setRunning(false);
+				}
 			}
 		}
 		else{
 			if(previousSection-1 >= 0){
 				for(int i = 0; i < 3; i++){
 					arrayP[previousSection-1][i].setRunning(false);
+					if(enemies[previousSection-1][0] != null){
+						enemies[previousSection-1][0].setRunning(false);
+					}
 				}
 			}
 		}
@@ -140,8 +141,13 @@ public class ScreenGame extends Screen implements KeyListener, MouseListener,Run
 			for(int a = 0; a < 2; a++){
 				for(int b = 0; b < arrayP[0].length; b++){
 					arrayP[a][b].play();
+					
+				}
+				if(enemies[a][0]!= null){
+					enemies[a][0].play();
 				}
 			}
+			
 		}
 		else{
 			if(currentSection >= arrayP.length - 1){
@@ -149,21 +155,20 @@ public class ScreenGame extends Screen implements KeyListener, MouseListener,Run
 					for(int b = 0; b < arrayP[0].length; b++){
 						arrayP[arrayP.length - 1 - a][b].play();
 					}
+					if(enemies[enemies.length - 1 - a][0] != null){
+						enemies[enemies.length - 1 - a][0].play();
+					}
 				}
 			}
 			else{
-				arrayP[currentSection - 1][0].play();
-				arrayP[currentSection - 1][1].play();
-				arrayP[currentSection - 1][2].play();
-				
-				arrayP[currentSection][0].play();
-				arrayP[currentSection][1].play();
-				arrayP[currentSection][2].play();
-				
-				arrayP[currentSection + 1][0].play();
-				arrayP[currentSection + 1][1].play();
-				arrayP[currentSection + 1][2].play();
-				
+				for(int i = -1; i < 2;i++){
+					for(int j = 0; j < 3;j++){
+						arrayP[currentSection + i][j].play();
+					}
+					if(enemies[currentSection + i][0] != null){
+						enemies[currentSection + i][0].play();
+					}
+				}
 			}
 		}
 	}

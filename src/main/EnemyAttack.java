@@ -57,7 +57,7 @@ public class EnemyAttack extends MovingComponent {
 				setRunning(false);
 				Start.screen.remove(this);
 			}
-			if(getPosx() < -100){
+			if(getPosx() < -100 || getPosx() > 800){
 				setRunning(false);
 				Start.screen.remove(this);
 			}

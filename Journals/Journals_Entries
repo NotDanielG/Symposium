@@ -107,3 +107,8 @@ Better hit detection that loops through all the enemies, tomorrow could be makin
 efficient so that it operates similarly like the platforms, in which it runs only when you
 are in the section or at certain zones. Tomorrow should be fixing platform placement and maybe
 adding enemy movement.
+06/1/17
+Task done:
+Added the bullet's sprites into the game, able to get it to transform. However, I am planning
+for the bullets, to flip depending on which side the player is facing, but the image reverts
+back to its smaller original size.
