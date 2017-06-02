@@ -19,7 +19,6 @@ public class Player extends MovingComponent {
 	private Image image;
 	private BufferedImage buff;
 	private Platform platform;
-	private List<BufferedImage> frames;
 	
 	private boolean load;
 	private boolean jump;
@@ -35,13 +34,20 @@ public class Player extends MovingComponent {
 	private int health;
 	private double grav;
 	
+	private List<BufferedImage> loadingIn;
+	private List<BufferedImage> walking;
+	private List<BufferedImage> jumping;
+	private List<BufferedImage> shooting;
+	private List<BufferedImage> shootWalk;
+	private int idx;
+	
 	
 	public Player(int x, int y,int w ,int h,String photo) {
 		super(x, y, w, h);
 		start = System.currentTimeMillis();
 		attackRate = 1000;
 		
-		frames = new ArrayList<BufferedImage>();
+		loadingIn = new ArrayList<BufferedImage>();
 		
 		platform = null;
 		imageSrc = photo;
@@ -65,9 +71,9 @@ public class Player extends MovingComponent {
 			buff = ImageIO.read(new File(imageSrc));
 			
 			BufferedImage sheet= ImageIO.read(new File("resources/spirte_sheet.png")); 
-			BufferedImage image1 = sheet.getSubimage(7, 12, 8, 6);
-			BufferedImage image2 = sheet.getSubimage(21, 9, 12, 12);
-			BufferedImage image3 = sheet.getSubimage(38, 8, 13, 13);
+			BufferedImage image1 = sheet.getSubimage(5, 4, 8, 48);
+			BufferedImage image2 = sheet.getSubimage(17, 23, 22, 29);
+			BufferedImage image3 = sheet.getSubimage(77, 13, 30, 39);
 			BufferedImage image4 = sheet.getSubimage(56, 7, 15, 15);
 			
 			
