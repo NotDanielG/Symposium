@@ -112,3 +112,7 @@ Task done:
 Added the bullet's sprites into the game, able to get it to transform. However, I am planning
 for the bullets, to flip depending on which side the player is facing, but the image reverts
 back to its smaller original size.
+06/2/17
+Task done:
+Bullet flips depending on the direction in which it is traveling at. However, leftward bullet is
+kind of weird, but it is acceptable I guess. Tomorrow should be adding in the player sprites.

@@ -5,6 +5,8 @@ import java.awt.Image;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -17,6 +19,7 @@ public class Player extends MovingComponent {
 	private Image image;
 	private BufferedImage buff;
 	private Platform platform;
+	private List<BufferedImage> frames;
 	
 	private boolean load;
 	private boolean jump;
@@ -38,6 +41,8 @@ public class Player extends MovingComponent {
 		start = System.currentTimeMillis();
 		attackRate = 1000;
 		
+		frames = new ArrayList<BufferedImage>();
+		
 		platform = null;
 		imageSrc = photo;
 		
@@ -58,6 +63,18 @@ public class Player extends MovingComponent {
 	private void loadImage() {
 		try {
 			buff = ImageIO.read(new File(imageSrc));
+			
+			BufferedImage sheet= ImageIO.read(new File("resources/spirte_sheet.png")); 
+			BufferedImage image1 = sheet.getSubimage(7, 12, 8, 6);
+			BufferedImage image2 = sheet.getSubimage(21, 9, 12, 12);
+			BufferedImage image3 = sheet.getSubimage(38, 8, 13, 13);
+			BufferedImage image4 = sheet.getSubimage(56, 7, 15, 15);
+			
+			
+			
+			
+			
+			
 			load = true;
 			update();
 		} catch (IOException e) {

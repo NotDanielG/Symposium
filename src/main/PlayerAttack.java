@@ -23,9 +23,11 @@ public class PlayerAttack extends MovingComponent {
 	private Player player;
 	private int z;
 	private int idx;
+	private double vx;
 	private double result;
 	private boolean load;
 	private boolean hit;
+	private boolean firstCheck;
 	
 	
 	private List<BufferedImage> frames;
@@ -36,8 +38,8 @@ public class PlayerAttack extends MovingComponent {
 	public PlayerAttack(int x, int y, int w, int h, double vx,int z ,String photo) {
 		super(x, y, 16, 12);
 		imageSrc = photo;
-		
 		idx = 1;
+		this.vx = vx;
 		
 		frames = new ArrayList<BufferedImage>();
 		turnRate = 200;
@@ -62,36 +64,26 @@ public class PlayerAttack extends MovingComponent {
 			frames.add(image3);
 			frames.add(image4);
 			
-			buff = frames.get(0);
 			
+			buff = frames.get(0);
 			update();
+			
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
 	}
 	public void update(Graphics2D g){
 		if(load){
-//			g.drawImage(image,0,0 , getWidth(), getHeight(), 0, 0, image.getWidth(null), image.getHeight(null),
-//					null);
-			
-			AffineTransform tx = AffineTransform.getScaleInstance(-1, 1);
-			tx.translate(-(frames.get(idx)).getWidth(null), 0);
-			
-			AffineTransformOp op = new AffineTransformOp(tx, 
-					 AffineTransformOp.TYPE_NEAREST_NEIGHBOR); 
-			buff = op.filter(buff, null);
-			
+			//Keeps on alternating
 			Image image = (Image) buff;
-			g.drawImage(buff, op, getX(), getY());
-//			g.drawImage(image,0,0 , getWidth(), getHeight(), 0, 0, image.getWidth(null), image.getHeight(null),
-//			null);
+			g.drawImage(image,0,0 , getWidth(), getHeight(), 0, 0, image.getWidth(null), image.getHeight(null),
+			null);
 			
 			
 			setPosy(getPosy() + getVy());
 			super.setY((int) getPosy());
 			result*= -1;
 			setPosx(result + getVx());
-			
 			super.setX((int) getPosx());
 			z = (int) (z + getVx());
 			
@@ -104,10 +96,17 @@ public class PlayerAttack extends MovingComponent {
 	}
 	public void run(){
 		setRunning(true);	
+		
 		while(isRunning()){
+			
 			try{
 				Thread.sleep(REFRESH_RATE);
-				
+				if(vx < 0 &&!firstCheck){
+					clear();
+					flip();
+					firstCheck = true;
+					System.out.println(buff.getWidth());
+				}
 				player = Start.screen.getPlayer();
 				result = player.getZ() - this.z;
 				if(!hit){	
@@ -122,8 +121,6 @@ public class PlayerAttack extends MovingComponent {
 								Start.screen.getEnemies()[i][0] = null;
 								
 								setVx(0);
-	//							Start.screen.remove(this);
-	//							setRunning(false); 
 								break;
 							}
 						}
@@ -153,6 +150,14 @@ public class PlayerAttack extends MovingComponent {
 			return true;
 		}
 		return false;
+	}
+	public void flip(){
+		AffineTransform tx = AffineTransform.getScaleInstance(-1, 1);
+		tx.translate(-(frames.get(idx)).getWidth(null), 0);
+		
+		AffineTransformOp op = new AffineTransformOp(tx, 
+				 AffineTransformOp.TYPE_NEAREST_NEIGHBOR); 
+		buff = op.filter(buff, null);
 	}
 	public boolean lowerRight(Enemy enemy){
 		if(getX() + getWidth() >= enemy.getX() && 
