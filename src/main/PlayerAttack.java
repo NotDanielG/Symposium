@@ -29,14 +29,13 @@ public class PlayerAttack extends MovingComponent {
 	private boolean hit;
 	private boolean firstCheck;
 	
-	
 	private List<BufferedImage> frames;
 	private long lastChange;
 	private long turnRate;
 	
 	
 	public PlayerAttack(int x, int y, int w, int h, double vx,int z ,String photo) {
-		super(x, y, 16, 12);
+		super(x, y, 13, 10);
 		imageSrc = photo;
 		idx = 1;
 		this.vx = vx;
@@ -74,7 +73,6 @@ public class PlayerAttack extends MovingComponent {
 	}
 	public void update(Graphics2D g){
 		if(load){
-			//Keeps on alternating
 			Image image = (Image) buff;
 			g.drawImage(image,0,0 , getWidth(), getHeight(), 0, 0, image.getWidth(null), image.getHeight(null),
 			null);
@@ -98,15 +96,15 @@ public class PlayerAttack extends MovingComponent {
 		setRunning(true);	
 		
 		while(isRunning()){
-			
 			try{
+				
 				Thread.sleep(REFRESH_RATE);
-				if(vx < 0 &&!firstCheck){
+				if( getVx() < 0&& !firstCheck){
 					clear();
 					flip();
 					firstCheck = true;
-					System.out.println(buff.getWidth());
 				}
+				
 				player = Start.screen.getPlayer();
 				result = player.getZ() - this.z;
 				if(!hit){	
@@ -116,9 +114,12 @@ public class PlayerAttack extends MovingComponent {
 						if(e[i][0] !=null){
 							if(isCollided(e[i][0])){
 								hit = true;
-								Start.screen.getEnemies()[i][0].setRunning(false);
-								Start.screen.remove(Start.screen.getEnemies()[i][0]);
-								Start.screen.getEnemies()[i][0] = null;
+								e[i][0].reduceHP();
+								if(e[i][0].getHP() <= 0){
+									Start.screen.getEnemies()[i][0].setRunning(false);
+									Start.screen.remove(Start.screen.getEnemies()[i][0]);
+									Start.screen.getEnemies()[i][0] = null;
+								}
 								
 								setVx(0);
 								break;
@@ -137,6 +138,7 @@ public class PlayerAttack extends MovingComponent {
 						
 					
 				}
+				firstCheck = true;
 				update();
 			}
 			catch(Exception e){
@@ -153,7 +155,7 @@ public class PlayerAttack extends MovingComponent {
 	}
 	public void flip(){
 		AffineTransform tx = AffineTransform.getScaleInstance(-1, 1);
-		tx.translate(-(frames.get(idx)).getWidth(null), 0);
+		tx.translate(-(frames.get(idx-1)).getWidth(null), 0);
 		
 		AffineTransformOp op = new AffineTransformOp(tx, 
 				 AffineTransformOp.TYPE_NEAREST_NEIGHBOR); 

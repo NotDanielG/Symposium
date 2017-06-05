@@ -116,3 +116,6 @@ back to its smaller original size.
 Task done:
 Bullet flips depending on the direction in which it is traveling at. However, leftward bullet is
 kind of weird, but it is acceptable I guess. Tomorrow should be adding in the player sprites.
+06/5/17:
+Task done:
+Player idle animation, now need to merge it with the player walking animation. 

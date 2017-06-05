@@ -27,6 +27,7 @@ public class Enemy extends MovingComponent implements Action{
 	private int h;
 	private int z;
 	private int side;
+	private int hp;
 	private double attackSpeed;
 	private double result;
 	private long lastAttack;
@@ -41,6 +42,7 @@ public class Enemy extends MovingComponent implements Action{
 		this.w = w;
 		this.h = h;
 		this.z = z;
+		this.hp = 3;
 		attackRate = 3000;
 		damaged = false;
 		attackSpeed = -1.0;
@@ -162,6 +164,12 @@ public class Enemy extends MovingComponent implements Action{
 	}
 	public void setAction(Action action){
 		this.action = action;
+	}
+	public void reduceHP(){
+		this.hp--;
+	}
+	public int getHP(){
+		return this.hp;
 	}
 
 }

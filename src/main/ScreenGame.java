@@ -42,6 +42,10 @@ public class ScreenGame extends Screen implements KeyListener, MouseListener,Run
 		keyCommands = new ArrayList<Key>();
 		player = new Player(350,300,50,50, "resources/square.png");
 		viewObjects.add(player);
+		
+		
+		
+		
 		player.play();
 	}
 	public void run() {
@@ -59,6 +63,19 @@ public class ScreenGame extends Screen implements KeyListener, MouseListener,Run
 			z+=200;
 		}
 		int idx = 0;
+		//Test
+		Platform xd = new Platform(10,yList.get(idx), 1000, 30, 
+				0, "resources/platform.png");
+		xd.setAction(new Action(){
+			public void act() {
+				getPlayer().hitGround((int)xd.getY() - player.getHeight());
+				getPlayer().setStart(System.currentTimeMillis());
+				getPlayer().setPlatform(xd);
+			}
+		});
+		addObject(xd);
+		xd.play();
+		
 		for(int i = 0; i < arrayP.length; i++){
 			for(int j = 0; j < arrayP[i].length; j++){
 				
@@ -203,6 +220,7 @@ public class ScreenGame extends Screen implements KeyListener, MouseListener,Run
 				key.setAction(new Action(){
 					public void act(){
 						player.setZ(player.getZ() + getPlayer().getAcceleration());
+						player.setWalk(true);
 					}
 				});
 				player.setDirection(1);
@@ -213,6 +231,7 @@ public class ScreenGame extends Screen implements KeyListener, MouseListener,Run
 				key.setAction(new Action(){
 					public void act(){
 						player.setZ(player.getZ() - getPlayer().getAcceleration());
+						player.setWalk(true);
 					}
 				});
 				player.setDirection(-1);
