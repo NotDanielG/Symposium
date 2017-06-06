@@ -66,13 +66,14 @@ public class Player extends MovingComponent {
 		start = System.currentTimeMillis();
 		idleStart = System.currentTimeMillis();
 		attackRate = 500;
-		idleRate = 500;
+		idleRate = 1000;
 		
 		idle = new ArrayList<BufferedImage>();
 		walking = new ArrayList<BufferedImage>();
+		jumping = new ArrayList<BufferedImage>();
 		fire = false;
 		
-		walkRate = 50;
+		walkRate = 100;
 		walkStart = System.currentTimeMillis();
 		
 		
@@ -83,13 +84,13 @@ public class Player extends MovingComponent {
 		z = x;
 		initialyV = 0;
 		initialxV = 6.0;
-		acceleration = 3;
+		acceleration = 2;
 		grav = 1;
 		health = 3;
 		direction = 1;
 		
 		setPosx(x);
-		setPosy(501);
+		setPosy(401);
 		
 		loadImage();
 		this.play();
@@ -110,12 +111,12 @@ public class Player extends MovingComponent {
 			
 			BufferedImage image4 = sheet.getSubimage(319, 19, 30, 34);
 			BufferedImage image5 = sheet.getSubimage(350, 19, 20, 34);
-			BufferedImage image6 = sheet.getSubimage(371,18,23,25);
+			BufferedImage image6 = sheet.getSubimage(371,18,23,35);
 			BufferedImage image7 = sheet.getSubimage(394, 19, 32, 34);
-			BufferedImage image8 = sheet.getSubimage(426, 20, 20, 34);
+			BufferedImage image8 = sheet.getSubimage(426, 20, 34, 33);
 			BufferedImage image9 = sheet.getSubimage(460,20,26,33);
 			
-			BufferedImage image10 = sheet.getSubimage(490,19, 22, 34);
+			BufferedImage image10 = sheet.getSubimage(489,19, 22, 34);
 			BufferedImage image11 = sheet.getSubimage(511, 18, 25, 35);
 			BufferedImage image12 = sheet.getSubimage(539,20,30,33);
 			BufferedImage image13 = sheet.getSubimage(570, 20, 34, 33);
@@ -132,6 +133,26 @@ public class Player extends MovingComponent {
 			walking.add(image12);
 			walking.add(image13);
 			walking.add(image14);
+			
+			BufferedImage image15 = sheet.getSubimage(5,73,24,37);
+			BufferedImage image16 = sheet.getSubimage(34,69,15,41);
+			BufferedImage image17 = sheet.getSubimage(55,64,19,46);
+			BufferedImage image18 = sheet.getSubimage(77,69,23,41);
+			BufferedImage image19 = sheet.getSubimage(102,117,27,42);
+			BufferedImage image20 = sheet.getSubimage(134,72,24,48);
+			BufferedImage image21 = sheet.getSubimage(159,78,30,32);
+			
+			jumping.add(image15);
+			jumping.add(image16);
+			jumping.add(image17);
+			jumping.add(image18);
+			jumping.add(image19);
+			jumping.add(image20);
+			jumping.add(image21);
+			
+			
+			
+			
 			buff = image1;
 			
 			load = true;
@@ -160,35 +181,40 @@ public class Player extends MovingComponent {
 			try {
 				Thread.sleep(REFRESH_RATE);
 				clear();
-				if(getVy() == 0 && getVx() == 0 && !fire){
-					walk = false;
-					idling = true;
-				}
-				else{
-					idling = false;
-				}
 				//Idle Animation
-				if(idling){
-					if(System.currentTimeMillis() - idleStart >= idleRate){
-						idleIdx++;
-						buff = idle.get(idleIdx%idle.size());
-						idleStart = System.currentTimeMillis();
-						setWidth(buff.getWidth());
-						setHeight(buff.getHeight());
-					}
+				if(jump){
+					
 				}
 				else{
-					if(walk){
-						if(System.currentTimeMillis() - walkStart >= walkRate){
-							walkIdx++;
-							buff = walking.get(walkIdx%walking.size());
-							walkStart = System.currentTimeMillis();
+					if(idling){
+						if(System.currentTimeMillis() - idleStart >= idleRate){
+							idleIdx++;
+							buff = idle.get(idleIdx%idle.size());
+							idleStart = System.currentTimeMillis();
 							setWidth(buff.getWidth());
 							setHeight(buff.getHeight());
 						}
 					}
+					else{
+						if(walk){
+							if(System.currentTimeMillis() - walkStart >= walkRate){
+								walkIdx++;
+								if(walkIdx == 11){
+									walkIdx = 1;
+									buff = walking.get(walkIdx);
+								}
+								else{
+									buff = walking.get(walkIdx%walking.size());
+								}
+								
+								walkStart = System.currentTimeMillis();
+								setWidth(buff.getWidth());
+								setHeight(buff.getHeight());
+								System.out.println("Walk Index: " + walkIdx%walking.size());
+							}
+						}
+					}
 				}
-				
 				
 				if(platform != null){
 					if(getX() > platform.getX() + platform.getWidth() ||
@@ -204,11 +230,6 @@ public class Player extends MovingComponent {
 				e.printStackTrace();
 			}
 		}
-	}
-	
-	private void startSpawn() {
-		// TODO Auto-generated method stub
-		
 	}
 	private void updatePhysics(){
 		if(load){
@@ -233,7 +254,7 @@ public class Player extends MovingComponent {
 	}
 	public void setJump(boolean jump) {
 		start = System.currentTimeMillis();
-		initialyV = 7;
+		initialyV = 4;
 		this.jump = jump;
 	}
 	public double findSpeed(){
@@ -282,8 +303,11 @@ public class Player extends MovingComponent {
 		buff = op.filter(buff, null);
 	}
 	public void setWalk(boolean b){
-		idling = false;
+		idling = !b;
 		this.walk = b;
+		if(walk == false){
+			walkIdx = 0;
+		}
 	}
 	
 }

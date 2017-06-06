@@ -264,7 +264,10 @@ public class ScreenGame extends Screen implements KeyListener, MouseListener,Run
 	public void keyReleased(KeyEvent e) {
 		int keyCode = e.getKeyCode();
 		for(Key key: keyCommands){
-			if(key.getCode() == keyCode){
+			if(key.getCode() == keyCode) {
+				if((keyCode == KeyEvent.VK_D || keyCode ==KeyEvent.VK_A)){
+					player.setWalk(false);
+				}
 				keyCommands.remove(key);
 				break;
 			}
