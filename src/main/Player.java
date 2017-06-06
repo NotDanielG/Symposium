@@ -43,6 +43,9 @@ public class Player extends MovingComponent {
 	private long attackRate;
 	private long lastAttack;
 	
+	private long jumpStart;
+	private long jumpRate;
+	
 	private int direction;
 	private int z;
 	private int acceleration;
@@ -55,11 +58,11 @@ public class Player extends MovingComponent {
 	private List<BufferedImage> walking;
 	private List<BufferedImage> jumping;
 	private List<BufferedImage> shooting;
+	private List<BufferedImage> shootJump;
 	private List<BufferedImage> shootWalk;
 	private int idx;
-	private int height;
-	private int width;
-	private boolean test;
+	
+	
 	
 	public Player(int x, int y,int w ,int h,String photo) {
 		super(x, y, 30, 34);
@@ -75,6 +78,15 @@ public class Player extends MovingComponent {
 		
 		walkRate = 100;
 		walkStart = System.currentTimeMillis();
+		
+		jumpRate = 500;
+		jumpStart = System.currentTimeMillis();
+		
+		
+		
+		
+		
+		
 		
 		
 		
@@ -183,7 +195,9 @@ public class Player extends MovingComponent {
 				clear();
 				//Idle Animation
 				if(jump){
-					
+					if(System.currentTimeMillis() - jumpStart >= jumpRate){
+						
+					}
 				}
 				else{
 					if(idling){
