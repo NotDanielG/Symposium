@@ -101,20 +101,15 @@ public class ScreenGame extends Screen implements KeyListener, MouseListener,Run
 					});
 					addObject(enemy);
 					enemies[i][0] = enemy;
-					enemy.play();
+					if(i == 0 || i == 1){
+						enemies[i][0].play();
+					}
 				}
-			}
-		}
-		for(int i = 0; i < 3;i++){
-			for(int j = 0; j < arrayP[0].length;j++){
-				arrayP[i][j].play();
 			}
 		}
 		while(gameRunning){
 			try {
 				Thread.sleep(20);
-				//currentSection * 800 = lower limit
-				//currenSection +1 * 800 = upper limit
 				if(player.getZ()+300 < currentSection * 800 - 400){
 					currentSection--;
 					loadSections(currentSection + 1);
@@ -128,7 +123,6 @@ public class ScreenGame extends Screen implements KeyListener, MouseListener,Run
 				
 				checkButtonList();
 			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 			

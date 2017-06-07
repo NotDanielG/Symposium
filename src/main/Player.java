@@ -34,6 +34,7 @@ public class Player extends MovingComponent {
 	private long walkStart;
 	private int walkIdx;
 	
+	
 	private boolean fire;
 	
 	
@@ -45,8 +46,12 @@ public class Player extends MovingComponent {
 	
 	private long jumpStart;
 	private long jumpRate;
+	private int jumpIdx;
+	
+	
 	
 	private int direction;
+	private int lastDirection;
 	private int z;
 	private int acceleration;
 	private int initialyV;
@@ -60,6 +65,8 @@ public class Player extends MovingComponent {
 	private List<BufferedImage> shooting;
 	private List<BufferedImage> shootJump;
 	private List<BufferedImage> shootWalk;
+	
+	private List<BufferedImage> currentList;
 	private int idx;
 	
 	
@@ -79,16 +86,8 @@ public class Player extends MovingComponent {
 		walkRate = 100;
 		walkStart = System.currentTimeMillis();
 		
-		jumpRate = 500;
-		jumpStart = System.currentTimeMillis();
-		
-		
-		
-		
-		
-		
-		
-		
+		jumpRate = 300;
+		jumpStart = System.currentTimeMillis();		
 		
 		platform = null;
 		imageSrc = photo;
@@ -97,13 +96,14 @@ public class Player extends MovingComponent {
 		initialyV = 0;
 		initialxV = 6.0;
 		acceleration = 2;
-		grav = 1;
+		grav = .5;
 		health = 3;
 		direction = 1;
+		lastDirection = 1;
 		
 		setPosx(x);
 		setPosy(401);
-		
+		currentList = idle;
 		loadImage();
 		this.play();
 	}
@@ -150,8 +150,8 @@ public class Player extends MovingComponent {
 			BufferedImage image16 = sheet.getSubimage(34,69,15,41);
 			BufferedImage image17 = sheet.getSubimage(55,64,19,46);
 			BufferedImage image18 = sheet.getSubimage(77,69,23,41);
-			BufferedImage image19 = sheet.getSubimage(102,117,27,42);
-			BufferedImage image20 = sheet.getSubimage(134,72,24,48);
+			BufferedImage image19 = sheet.getSubimage(102,68,27,42);
+			BufferedImage image20 = sheet.getSubimage(134,72,24,38);
 			BufferedImage image21 = sheet.getSubimage(159,78,30,32);
 			
 			jumping.add(image15);
@@ -161,7 +161,6 @@ public class Player extends MovingComponent {
 			jumping.add(image19);
 			jumping.add(image20);
 			jumping.add(image21);
-			
 			
 			
 			
@@ -192,11 +191,27 @@ public class Player extends MovingComponent {
 		while(isRunning()){
 			try {
 				Thread.sleep(REFRESH_RATE);
-				clear();
-				//Idle Animation
+				System.out.println("Prev: "+ lastDirection);
+				System.out.println("Current: " + direction);
+				if(lastDirection != direction){
+					flip(currentList);
+				}
 				if(jump){
 					if(System.currentTimeMillis() - jumpStart >= jumpRate){
-						
+						if(getVy() < 0 && jumpIdx != 2){
+							jumpIdx++;
+							clear();
+						}
+						else{
+							if(getVy() > 0 && jumpIdx != jumping.size() -1){
+								jumpIdx++;
+								clear();
+							}
+						}
+						buff = jumping.get(jumpIdx%jumping.size());
+						jumpStart = System.currentTimeMillis();
+						setWidth(buff.getWidth());
+						setHeight(buff.getHeight());
 					}
 				}
 				else{
@@ -207,6 +222,7 @@ public class Player extends MovingComponent {
 							idleStart = System.currentTimeMillis();
 							setWidth(buff.getWidth());
 							setHeight(buff.getHeight());
+							clear();
 						}
 					}
 					else{
@@ -216,27 +232,31 @@ public class Player extends MovingComponent {
 								if(walkIdx == 11){
 									walkIdx = 1;
 									buff = walking.get(walkIdx);
+									
 								}
 								else{
 									buff = walking.get(walkIdx%walking.size());
 								}
-								
+								clear();
 								walkStart = System.currentTimeMillis();
 								setWidth(buff.getWidth());
 								setHeight(buff.getHeight());
-								System.out.println("Walk Index: " + walkIdx%walking.size());
 							}
 						}
 					}
 				}
 				
 				if(platform != null){
+					if(getY() + getHeight() < platform.getY()){
+						setY(platform.getY() - getHeight());
+					}
 					if(getX() > platform.getX() + platform.getWidth() ||
 							getX() + getWidth () < platform.getX() || jump){
 						setStart(System.currentTimeMillis());
 						platform = null;
 					}
 				}
+				
 				updatePhysics();
 				update();
 				
@@ -269,6 +289,7 @@ public class Player extends MovingComponent {
 	public void setJump(boolean jump) {
 		start = System.currentTimeMillis();
 		initialyV = 4;
+		currentList = jumping;
 		this.jump = jump;
 	}
 	public double findSpeed(){
@@ -281,6 +302,8 @@ public class Player extends MovingComponent {
 		jump = false;
 		setVy(0);
 		initialyV = 0;
+		jumpIdx = 0;
+		currentList = idle;
 		super.setY(y);
 	}
 	public void setStart(long start){
@@ -306,11 +329,15 @@ public class Player extends MovingComponent {
 		}
 	}
 	public void setDirection(int x){
+		
 		direction = (int) ((x*initialxV)/initialxV);
 	}
 	public void flip(List list){
+		for(int i = 0; i < list.size();i++){
+			
+		}
 		AffineTransform tx = AffineTransform.getScaleInstance(-1, 1);
-		tx.translate(-((Image) list.get(idx-1)).getWidth(null), 0);
+		tx.translate(-(buff.getWidth(null)), 0);
 		
 		AffineTransformOp op = new AffineTransformOp(tx, 
 				 AffineTransformOp.TYPE_NEAREST_NEIGHBOR); 
@@ -321,7 +348,9 @@ public class Player extends MovingComponent {
 		this.walk = b;
 		if(walk == false){
 			walkIdx = 0;
+			currentList = idle;
 		}
+		currentList = walking;
 	}
 	
 }

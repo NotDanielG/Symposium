@@ -124,3 +124,6 @@ Task done:
 God the player walking and idle animation to work together. Just finished getting the
 coordinates for the player jump animation. Should do the same process as what I did today
 plus any other animation.
+06/7/17:
+Task done:
+Jumping animation is complete. Need to do the flip the player's image when turning left.
