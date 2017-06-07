@@ -194,7 +194,7 @@ public class Player extends MovingComponent {
 				System.out.println("Prev: "+ lastDirection);
 				System.out.println("Current: " + direction);
 				if(lastDirection != direction){
-					flip(currentList);
+					flip();
 				}
 				if(jump){
 					if(System.currentTimeMillis() - jumpStart >= jumpRate){
@@ -332,16 +332,14 @@ public class Player extends MovingComponent {
 		
 		direction = (int) ((x*initialxV)/initialxV);
 	}
-	public void flip(List list){
-		for(int i = 0; i < list.size();i++){
-			
-		}
+	public void flip(){
 		AffineTransform tx = AffineTransform.getScaleInstance(-1, 1);
-		tx.translate(-(buff.getWidth(null)), 0);
+		tx.translate(direction*(buff.getWidth(null)), 0);
 		
 		AffineTransformOp op = new AffineTransformOp(tx, 
 				 AffineTransformOp.TYPE_NEAREST_NEIGHBOR); 
 		buff = op.filter(buff, null);
+		
 	}
 	public void setWalk(boolean b){
 		idling = !b;
