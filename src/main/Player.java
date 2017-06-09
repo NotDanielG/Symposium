@@ -240,6 +240,9 @@ public class Player extends MovingComponent {
 								else{
 									buff = walking.get(walkIdx%walking.size());
 								}
+								System.out.println(walkIdx);
+								System.out.println(getY());
+								System.out.println(getHeight());
 								clear();
 								walkStart = System.currentTimeMillis();
 								walkIdx++;
@@ -312,6 +315,7 @@ public class Player extends MovingComponent {
 		setVy(0);
 		initialyV = 0;
 		jumpIdx = 0;
+		setHeight(34);
 		super.setY(y);
 	}
 	public void setStart(long start){
