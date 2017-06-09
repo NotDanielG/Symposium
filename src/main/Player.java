@@ -8,6 +8,7 @@ import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.imageio.ImageIO;
@@ -62,6 +63,12 @@ public class Player extends MovingComponent {
 	private List<BufferedImage> idle;
 	private List<BufferedImage> walking;
 	private List<BufferedImage> jumping;
+	
+	private List<BufferedImage> idleF;
+	private List<BufferedImage> walkingF;
+	private List<BufferedImage> jumpingF;
+	
+	
 	private List<BufferedImage> shooting;
 	private List<BufferedImage> shootJump;
 	private List<BufferedImage> shootWalk;
@@ -78,9 +85,11 @@ public class Player extends MovingComponent {
 		attackRate = 500;
 		idleRate = 1000;
 		
-		idle = new ArrayList<BufferedImage>();
-		walking = new ArrayList<BufferedImage>();
-		jumping = new ArrayList<BufferedImage>();
+		idle = Collections.synchronizedList(new ArrayList<BufferedImage>());
+		walking = Collections.synchronizedList(new ArrayList<BufferedImage>());
+		jumping = Collections.synchronizedList(new ArrayList<BufferedImage>());
+		
+		
 		fire = false;
 		
 		walkRate = 100;
@@ -95,7 +104,7 @@ public class Player extends MovingComponent {
 		z = x;
 		initialyV = 0;
 		initialxV = 6.0;
-		acceleration = 2;
+		acceleration = 1;
 		grav = .5;
 		health = 3;
 		direction = 1;
@@ -124,7 +133,7 @@ public class Player extends MovingComponent {
 			BufferedImage image4 = sheet.getSubimage(319, 19, 30, 34);
 			BufferedImage image5 = sheet.getSubimage(350, 19, 20, 34);
 			BufferedImage image6 = sheet.getSubimage(371,18,23,35);
-			BufferedImage image7 = sheet.getSubimage(394, 19, 32, 34);
+			BufferedImage image7 = sheet.getSubimage(394, 19, 30, 34);
 			BufferedImage image8 = sheet.getSubimage(426, 20, 34, 33);
 			BufferedImage image9 = sheet.getSubimage(460,20,26,33);
 			
@@ -163,7 +172,6 @@ public class Player extends MovingComponent {
 			jumping.add(image21);
 			
 			
-			
 			buff = image1;
 			
 			load = true;
@@ -174,26 +182,25 @@ public class Player extends MovingComponent {
 	}
 	public void update(Graphics2D g){
 		if(load){
-			
 			image = (Image) buff;
+			setWidth(image.getWidth(null));
+			setWidth(image.getHeight(null));
 			g.drawImage(image,0,0 , getWidth(), getHeight(), 0, 0, getWidth(), getHeight(),
 					null);
 			
 			setPosy(getPosy() + getVy());
 			super.setY((int) getPosy());
 			
-//			setPosx(getPosx() + getVx());
 			super.setX((int) getPosx());
 		}
 	}
 	public void run(){
-		setRunning(true);
+		setRunning(true);		
 		while(isRunning()){
 			try {
 				Thread.sleep(REFRESH_RATE);
-				System.out.println("Prev: "+ lastDirection);
-				System.out.println("Current: " + direction);
-				if(lastDirection != direction){
+				if(direction != lastDirection){
+					lastDirection = direction;
 					flip();
 				}
 				if(jump){
@@ -210,8 +217,8 @@ public class Player extends MovingComponent {
 						}
 						buff = jumping.get(jumpIdx%jumping.size());
 						jumpStart = System.currentTimeMillis();
-						setWidth(buff.getWidth());
-						setHeight(buff.getHeight());
+						setWidth(jumping.get(jumpIdx%jumping.size()).getWidth());
+						setHeight(jumping.get(jumpIdx%jumping.size()).getHeight());
 					}
 				}
 				else{
@@ -220,41 +227,41 @@ public class Player extends MovingComponent {
 							idleIdx++;
 							buff = idle.get(idleIdx%idle.size());
 							idleStart = System.currentTimeMillis();
-							setWidth(buff.getWidth());
-							setHeight(buff.getHeight());
 							clear();
 						}
 					}
 					else{
 						if(walk){
 							if(System.currentTimeMillis() - walkStart >= walkRate){
-								walkIdx++;
-								if(walkIdx == 11){
-									walkIdx = 1;
+								if(walkIdx >= 11){
+									walkIdx = 2;
 									buff = walking.get(walkIdx);
-									
 								}
 								else{
 									buff = walking.get(walkIdx%walking.size());
 								}
 								clear();
 								walkStart = System.currentTimeMillis();
-								setWidth(buff.getWidth());
-								setHeight(buff.getHeight());
+								walkIdx++;
 							}
 						}
 					}
 				}
 				
-				if(platform != null){
-					if(getY() + getHeight() < platform.getY()){
-						setY(platform.getY() - getHeight());
+				try{
+					if(platform != null){
+						if(getY() + getHeight() < platform.getY()){
+							setY(platform.getY() - 34);
+						}
+						if(platform != null && (getX() > platform.getX() + platform.getWidth() ||
+								getX() + getWidth () < platform.getX() || jump)){
+							setStart(System.currentTimeMillis());
+							platform = null;
+						}
 					}
-					if(getX() > platform.getX() + platform.getWidth() ||
-							getX() + getWidth () < platform.getX() || jump){
-						setStart(System.currentTimeMillis());
-						platform = null;
-					}
+				}
+				catch(Exception e){
+					e.printStackTrace();
 				}
 				
 				updatePhysics();
@@ -287,6 +294,7 @@ public class Player extends MovingComponent {
 		return jump;
 	}
 	public void setJump(boolean jump) {
+		clear();
 		start = System.currentTimeMillis();
 		initialyV = 4;
 		currentList = jumping;
@@ -299,11 +307,11 @@ public class Player extends MovingComponent {
 		return newV;
 	}
 	public void hitGround(int y){
+		clear();
 		jump = false;
 		setVy(0);
 		initialyV = 0;
 		jumpIdx = 0;
-		currentList = idle;
 		super.setY(y);
 	}
 	public void setStart(long start){
@@ -333,20 +341,49 @@ public class Player extends MovingComponent {
 		direction = (int) ((x*initialxV)/initialxV);
 	}
 	public void flip(){
-		AffineTransform tx = AffineTransform.getScaleInstance(-1, 1);
-		tx.translate(direction*(buff.getWidth(null)), 0);
-		
-		AffineTransformOp op = new AffineTransformOp(tx, 
-				 AffineTransformOp.TYPE_NEAREST_NEIGHBOR); 
-		buff = op.filter(buff, null);
-		
+			for(int i = 0; i < idle.size(); i++){
+				BufferedImage img = idle.get(i);
+				AffineTransform tx = AffineTransform.getScaleInstance(-1, 1);
+				tx.translate(-(img.getWidth(null)), 0);
+				
+				AffineTransformOp op = new AffineTransformOp(tx, 
+						 AffineTransformOp.TYPE_NEAREST_NEIGHBOR); 
+				img = op.filter(img, null);
+				idle.add(i,img);
+				idle.remove(i+1);
+				
+			}
+			for(int i = 0; i < jumping.size(); i++){
+				BufferedImage img = jumping.get(i);
+				AffineTransform tx = AffineTransform.getScaleInstance(-1, 1);
+				tx.translate(-(img.getWidth(null)), 0);
+				
+				AffineTransformOp op = new AffineTransformOp(tx, 
+						 AffineTransformOp.TYPE_NEAREST_NEIGHBOR); 
+				img = op.filter(img, null);
+				jumping.add(i,img);
+				jumping.remove(i+1);
+				
+			}
+			for(int i = 0; i < walking.size(); i++){
+				BufferedImage img = walking.get(i);
+				AffineTransform tx = AffineTransform.getScaleInstance(-1, 1);
+				tx.translate(-(img.getWidth(null)), 0);
+				
+				AffineTransformOp op = new AffineTransformOp(tx, 
+						 AffineTransformOp.TYPE_NEAREST_NEIGHBOR); 
+				img = op.filter(img, null);
+				walking.add(i,img);
+				walking.remove(i+1);
+				
+			}
 	}
 	public void setWalk(boolean b){
 		idling = !b;
 		this.walk = b;
 		if(walk == false){
 			walkIdx = 0;
-			currentList = idle;
+			
 		}
 		currentList = walking;
 	}
