@@ -73,7 +73,6 @@ public class Player extends MovingComponent {
 	private List<BufferedImage> shootJump;
 	private List<BufferedImage> shootWalk;
 	
-	private List<BufferedImage> currentList;
 	private int idx;
 	
 	
@@ -112,7 +111,6 @@ public class Player extends MovingComponent {
 		
 		setPosx(x);
 		setPosy(401);
-		currentList = idle;
 		loadImage();
 		this.play();
 	}
@@ -233,19 +231,22 @@ public class Player extends MovingComponent {
 					else{
 						if(walk){
 							if(System.currentTimeMillis() - walkStart >= walkRate){
-								if(walkIdx >= 11){
-									walkIdx = 2;
-									buff = walking.get(walkIdx);
-								}
-								else{
-									buff = walking.get(walkIdx%walking.size());
-								}
-								System.out.println(walkIdx);
-								System.out.println(getY());
-								System.out.println(getHeight());
+//								if(walkIdx >= 10){
+//									buff = walking.get(walkIdx);
+//									walkIdx = 2;
+//								}
+//								else{
+//									buff = walking.get(walkIdx%walking.size());
+//								}
+								buff = walking.get(walkIdx%walking.size());
 								clear();
 								walkStart = System.currentTimeMillis();
-								walkIdx++;
+								if(walkIdx >= walking.size()){
+									walkIdx = 2;
+								}
+								else{
+									walkIdx+=1;
+								}
 							}
 						}
 					}
@@ -300,7 +301,6 @@ public class Player extends MovingComponent {
 		clear();
 		start = System.currentTimeMillis();
 		initialyV = 4;
-		currentList = jumping;
 		this.jump = jump;
 	}
 	public double findSpeed(){
@@ -389,7 +389,6 @@ public class Player extends MovingComponent {
 			walkIdx = 0;
 			
 		}
-		currentList = walking;
 	}
 	
 }
