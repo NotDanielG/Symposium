@@ -101,12 +101,11 @@ public class ScreenGame extends Screen implements KeyListener, MouseListener,Run
 					});
 					addObject(enemy);
 					enemies[i][0] = enemy;
-					if(i == 0 || i == 1){
-						enemies[i][0].play();
-					}
+					enemy.play();
 				}
 			}
 		}
+		
 		while(gameRunning){
 			try {
 				Thread.sleep(20);

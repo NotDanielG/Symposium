@@ -8,6 +8,7 @@ import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 
 import javax.imageio.ImageIO;
 import javax.swing.ImageIcon;
@@ -22,6 +23,15 @@ public class Enemy extends MovingComponent implements Action{
 	private Action action;
 	private BufferedImage buff;
 	private Player player;
+	
+	private List<BufferedImage> idle;
+	private int idleIdx;
+	private long idleStart;
+	
+	
+	private List<BufferedImage> attacking;
+	private int attackIdx;
+	
 	
 	private int w;
 	private int h;
@@ -55,6 +65,17 @@ public class Enemy extends MovingComponent implements Action{
 	private void loadImage() {
 		try {
 			buff = ImageIO.read(new File(imageSrc));
+			BufferedImage sheet = ImageIO.read(new File("resources/enemy.png"));
+			BufferedImage image1 = sheet.getSubimage(10, 5, 32, 37);
+			BufferedImage image2 = sheet.getSubimage(60, 5, 32, 37);
+			BufferedImage image3 = sheet.getSubimage(110, 5, 32, 38);
+			
+			BufferedImage image4 = sheet.getSubimage(159, 5, 34, 37);
+			BufferedImage image5 = sheet.getSubimage(207, 5, 38, 38);
+			BufferedImage image6 = sheet.getSubimage(256, 4, 40, 39);
+			BufferedImage image7 = sheet.getSubimage(305, 5, 41, 37);
+			
+			
 			load = true;
 			update();
 		} catch (IOException e) {
