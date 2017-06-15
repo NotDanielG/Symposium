@@ -23,15 +23,16 @@ public class ScreenGame extends Screen implements KeyListener, MouseListener,Run
 	private List<Platform> platforms;
 	private List<Integer> zList;
 	private List<Integer> yList;
+	private List<Graphic> hearts;
 	
 	private int currentSection;
 	
 	
 	public ScreenGame(int width, int height) {
 		super(width, height);
-		arrayP = new Platform[5][3];
+		arrayP = new Platform[7][3];
 		
-		enemies = new Enemy[5][1];
+		enemies = new Enemy[7][2];
 		gameRunning = true;
 		currentSection = 0;
 		Thread x = new Thread(this);
@@ -43,29 +44,10 @@ public class ScreenGame extends Screen implements KeyListener, MouseListener,Run
 		player = new Player(350,300,50,50, "resources/square.png");
 		viewObjects.add(player);
 		
-		
-		
-		
 		player.play();
 	}
-	public void run() {
-		
-		keyCommands = Collections.synchronizedList(new ArrayList<Key>());
-		platforms = Collections.synchronizedList(new ArrayList<Platform>());
-		
-		zList = Collections.synchronizedList(new ArrayList<Integer>());
-		yList = Collections.synchronizedList(new ArrayList<Integer>());
-		
-		int z = 350;
-		int y = 450;
-		for(int i = 0; i < arrayP.length*arrayP[0].length; i++){
-			addToList(z,y);
-			z+=200;
-		}
-		int idx = 0;
-		//Test
-		Platform xd = new Platform(10,yList.get(idx), 1000, 30, 
-				0, "resources/platform.png");
+	public void createPlatform(int x, int y, int width, int height, int z, int i){
+		Platform xd = new Platform(x, y, width, height, z, "resources/platform.png");
 		xd.setAction(new Action(){
 			public void act() {
 				getPlayer().hitGround((int)xd.getY() - player.getHeight());
@@ -75,56 +57,141 @@ public class ScreenGame extends Screen implements KeyListener, MouseListener,Run
 		});
 		addObject(xd);
 		xd.play();
-		
-		for(int i = 0; i < arrayP.length; i++){
-			for(int j = 0; j < arrayP[i].length; j++){
-				
-				Platform platform = new Platform(10,yList.get(idx), 100, 30, zList.get(idx), "resources/platform.png");
-				platform.setAction(new Action(){
-					public void act() {
-						getPlayer().hitGround((int)platform.getY() - player.getHeight());
-						getPlayer().setStart(System.currentTimeMillis());
-						getPlayer().setPlatform(platform);
-					}
-				});
-				
-				arrayP[i][j] = platform;
-				addObject(platform);
-				idx++;
-				if(j == 1){
-					Enemy enemy = new Enemy(10,yList.get(idx) - 50, 50,50,
-							zList.get(idx) + 50,"resources/triangle.png");
-					enemy.setAction(new Action(){
-						public void act(){
-							System.out.println("hit");
-						}
-					});
-					addObject(enemy);
-					enemies[i][0] = enemy;
-					enemy.play();
-				}
+	}
+	public void createEnemy(int x, int y, int z, int i){
+		Enemy enemy = new Enemy(x, y - 37, 50,50, z,"resources/enemyattack.png");
+		enemy.setAction(new Action(){
+			public void act(){
+				player.decreaseHP();
 			}
-		}
+		});
+		addObject(enemy);
+		enemies[i][0] = enemy;
+		enemy.play();
+	}
+	public void run() {
+		
+		keyCommands = Collections.synchronizedList(new ArrayList<Key>());
+		platforms = Collections.synchronizedList(new ArrayList<Platform>());
+		
+		zList = Collections.synchronizedList(new ArrayList<Integer>());
+		yList = Collections.synchronizedList(new ArrayList<Integer>());
+		hearts = Collections.synchronizedList(new ArrayList<Graphic>());
+		
+		createPlatform(10, 450, 200, 30 , 600, 0);
+		createPlatform(10, 450, 200, 30 , 850, 0);
+		createPlatform(10, 450, 200, 30 , 1100, 0);
+		createPlatform(10, 320, 200, 30 , 1100, 0);
+		createPlatform(10, 450, 200, 30 , 1350, 0);
+		
+		createEnemy(10, 450, 850, 0);
+		createEnemy(10, 320, 1150, 1);
+		
+		createPlatform(10, 450, 200, 30 , 1600, 0);
+		createPlatform(10, 320, 200, 30 , 1850, 0);
+		createPlatform(10, 450, 200, 30 , 2000, 0);
+		
+		createEnemy(10, 320, 1950, 2);
+		
+		createPlatform(10, 450, 200, 30 , 2170, 0);
+		createPlatform(10, 320, 200, 30 , 2450, 0);
+		createPlatform(10, 220, 200, 30 , 2600, 0);
+		
+		createEnemy(10, 320, 2500, 3); 
+		createEnemy(10, 220, 2650, 4); 
+		
+		createPlatform(10, 450, 200, 30 , 2850, 0);
+		createPlatform(10, 500, 200, 30 , 3000, 0);
+		createPlatform(10, 400, 200, 30 , 3250, 0);
+		
+		createEnemy(10,500,3100,5);
+		
+		createPlatform(10, 450, 200, 30 , 3400, 0);
+		createPlatform(10, 350, 200, 30 , 3550, 0);
+		createPlatform(10, 330, 200, 30 , 3700, 0);
+		
+		createEnemy(10,330, 3750, 6);
+		
+		//Test
+//		Platform xd = new Platform(10,yList.get(idx), 1000, 30, 
+//				0, "resources/platform.png");
+//		xd.setAction(new Action(){
+//			public void act() {
+//				getPlayer().hitGround((int)xd.getY() - player.getHeight());
+//				getPlayer().setStart(System.currentTimeMillis());
+//				getPlayer().setPlatform(xd);
+//			}
+//		});
+//		addObject(xd);
+//		xd.play();
+		
+//		for(int i = 0; i < arrayP.length; i++){
+//			for(int j = 0; j < arrayP[i].length; j++){
+//				
+//				Platform platform = new Platform(10,yList.get(idx), 100, 30, zList.get(idx), "resources/platform.png");
+//				platform.setAction(new Action(){
+//					public void act() {
+//						getPlayer().hitGround((int)platform.getY() - player.getHeight());
+//						getPlayer().setStart(System.currentTimeMillis());
+//						getPlayer().setPlatform(platform);
+//					}
+//				});
+//				
+//				arrayP[i][j] = platform;
+//				addObject(platform);
+//				idx++;
+//				if(j == 1){
+//					Enemy enemy = new Enemy(10,yList.get(idx) - 37, 50,50,
+//							zList.get(idx) + 50,"resources/triangle.png");
+//					enemy.setAction(new Action(){
+//						public void act(){
+//							System.out.println("hit");
+//						}
+//					});
+//					addObject(enemy);
+//					enemies[i][0] = enemy;
+//					enemy.play();
+//				}
+//			}
+//		}
 		
 		while(gameRunning){
 			try {
 				Thread.sleep(20);
-				if(player.getZ()+300 < currentSection * 800 - 400){
-					currentSection--;
-					loadSections(currentSection + 1);
+//				if(player.getZ()+300 < currentSection * 800 - 400){
+//					currentSection--;
+//					loadSections(currentSection + 1);
+//				}
+//				else{
+//					if(player.getZ()+300 > (currentSection + 1) * 800 - 400){
+//						currentSection++;
+//						loadSections(currentSection - 1);
+//					}
+//				}
+				updateHP();
+				if(player.getHP() == 0){
+					player.setZ(250);
 				}
-				else{
-					if(player.getZ()+300 > (currentSection + 1) * 800 - 400){
-						currentSection++;
-						loadSections(currentSection - 1);
-					}
-				}
-				
 				checkButtonList();
 			} catch (InterruptedException e) {
 				e.printStackTrace();
 			}
 			
+		}
+	}
+	public void updateHP(){
+		int x = 20;
+
+		while (hearts.size() > 0) {
+			this.remove(hearts.remove(hearts.size() - 1));
+		}
+
+		for (int i = 0; i < player.getHP(); i++) {
+			Graphic heart = new Graphic(x, 40, 20, 20, "resources/heart.png");
+			hearts.add(heart);
+			this.addObject(heart);
+
+			x += 30;
 		}
 	}
 	private void loadSections(int previousSection) {
@@ -239,20 +306,6 @@ public class ScreenGame extends Screen implements KeyListener, MouseListener,Run
 		}
 		
 	}
-	public Platform createPlatform(int y, int z){
-		Platform platform = new Platform(50,y, 200, 200, z, "resources/platform.png");
-		platform.setAction(new Action(){
-			public void act() {
-				getPlayer().hitGround((int)platform.getY() - player.getHeight());
-				getPlayer().setStart(System.currentTimeMillis());
-				getPlayer().setPlatform(platform);
-			}
-		});
-		
-		
-		addObject(platform);
-		return platform;
-	}
 	@Override
 	public void keyReleased(KeyEvent e) {
 		int keyCode = e.getKeyCode();
@@ -294,7 +347,6 @@ public class ScreenGame extends Screen implements KeyListener, MouseListener,Run
 	}
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		System.out.println("x: " + e.getX() +"y: " + e.getY());
 		
 	}
 

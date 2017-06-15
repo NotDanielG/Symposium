@@ -2,6 +2,7 @@ package main;
 
 import java.awt.Graphics2D;
 
+
 import java.awt.Image;
 import java.awt.geom.AffineTransform;
 import java.awt.image.AffineTransformOp;
@@ -65,19 +66,6 @@ public class Player extends MovingComponent {
 	private List<BufferedImage> walking;
 	private List<BufferedImage> jumping;
 	
-	private List<BufferedImage> idleF;
-	private List<BufferedImage> walkingF;
-	private List<BufferedImage> jumpingF;
-	
-	
-	private List<BufferedImage> shooting;
-	private List<BufferedImage> shootJump;
-	private List<BufferedImage> shootWalk;
-	
-	private int idx;
-	
-	
-	
 	public Player(int x, int y,int w ,int h,String photo) {
 		super(x, y, 30, 34);
 		start = System.currentTimeMillis();
@@ -88,7 +76,6 @@ public class Player extends MovingComponent {
 		idle = Collections.synchronizedList(new ArrayList<BufferedImage>());
 		walking = Collections.synchronizedList(new ArrayList<BufferedImage>());
 		jumping = Collections.synchronizedList(new ArrayList<BufferedImage>());
-		
 		
 		fire = false;
 		
@@ -104,8 +91,8 @@ public class Player extends MovingComponent {
 		z = x;
 		initialyV = 0;
 		initialxV = 6.0;
-		acceleration = 1;
-		grav = .5;
+		acceleration = 2;
+		grav = .8;
 		health = 3;
 		direction = 1;
 		lastDirection = 1;
@@ -132,7 +119,7 @@ public class Player extends MovingComponent {
 			BufferedImage image4 = sheet.getSubimage(319, 19, 30, 34);
 			BufferedImage image5 = sheet.getSubimage(350, 19, 20, 34);
 			BufferedImage image6 = sheet.getSubimage(371,18,23,35);
-			BufferedImage image7 = sheet.getSubimage(394, 19, 30, 34);
+			BufferedImage image7 = sheet.getSubimage(394, 19, 31, 34);
 			BufferedImage image8 = sheet.getSubimage(426, 20, 34, 33);
 			BufferedImage image9 = sheet.getSubimage(460,20,26,33);
 			
@@ -182,8 +169,9 @@ public class Player extends MovingComponent {
 	public void update(Graphics2D g){
 		if(load){
 			image = (Image) buff;
-			setWidth(image.getWidth(null));
-			setWidth(image.getHeight(null));
+			setWidth(buff.getHeight(null));
+			setHeight(buff.getHeight(null));
+			
 			g.drawImage(image,0,0 , getWidth(), getHeight(), 0, 0, getWidth(), getHeight(),
 					null);
 			
@@ -216,8 +204,6 @@ public class Player extends MovingComponent {
 						}
 						buff = jumping.get(jumpIdx%jumping.size());
 						jumpStart = System.currentTimeMillis();
-						setWidth(jumping.get(jumpIdx%jumping.size()).getWidth());
-						setHeight(jumping.get(jumpIdx%jumping.size()).getHeight());
 					}
 				}
 				else{
@@ -232,22 +218,16 @@ public class Player extends MovingComponent {
 					else{
 						if(walk){
 							if(System.currentTimeMillis() - walkStart >= walkRate){
-//								if(walkIdx >= 10){
-//									buff = walking.get(walkIdx);
-//									walkIdx = 2;
-//								}
-//								else{
-//									buff = walking.get(walkIdx%walking.size());
-//								}
 								buff = walking.get(walkIdx%walking.size());
-								clear();
+								
 								walkStart = System.currentTimeMillis();
 								if(walkIdx >= walking.size()){
-									walkIdx = 2;
+									walkIdx = 3;
 								}
 								else{
 									walkIdx+=1;
 								}
+								clear();
 							}
 						}
 					}
@@ -268,7 +248,10 @@ public class Player extends MovingComponent {
 				catch(Exception e){
 					e.printStackTrace();
 				}
-				
+				if(walk){
+					setWidth(buff.getWidth(null));
+					setHeight(buff.getHeight(null));
+				}
 				updatePhysics();
 				update();
 				
@@ -285,7 +268,7 @@ public class Player extends MovingComponent {
 		}
 		if(getPosy() > 900){
 			setVy(-5);
-			setZ(450);
+			setZ(400);
 			setPosy(300);
 		}
 	}
@@ -391,5 +374,10 @@ public class Player extends MovingComponent {
 			
 		}
 	}
-	
+	public int getHP(){
+		return health;
+	}
+	public void increaseHP(){
+		health++;
+	}
 }

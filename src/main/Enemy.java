@@ -4,10 +4,14 @@ import java.awt.Graphics2D;
 
 
 import java.awt.Image;
+import java.awt.geom.AffineTransform;
+import java.awt.image.AffineTransformOp;
 import java.awt.image.BufferedImage;
 import java.awt.image.ImageObserver;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.imageio.ImageIO;
@@ -25,18 +29,26 @@ public class Enemy extends MovingComponent implements Action{
 	private Player player;
 	
 	private List<BufferedImage> idle;
+	private boolean idling;
 	private int idleIdx;
 	private long idleStart;
+	private long idleRate;
 	
 	
-	private List<BufferedImage> attacking;
+	private List<BufferedImage> attack;
+	private boolean attacking;
+	private long atklast;
+	private long atkRate;
 	private int attackIdx;
 	
 	
 	private int w;
 	private int h;
 	private int z;
+	
 	private int side;
+	
+	
 	private int hp;
 	private double attackSpeed;
 	private double result;
@@ -47,12 +59,17 @@ public class Enemy extends MovingComponent implements Action{
 	private boolean load;
 	
 	public Enemy(int x, int y, int w, int h,int z,String photo) {
-		super(x,y,w,h);
+		super(x,y,32,37);
 		this.imageSrc = photo;
 		this.w = w;
 		this.h = h;
 		this.z = z;
 		this.hp = 3;
+		
+		atkRate = 150;
+		idleRate = 400;
+		attack = Collections.synchronizedList(new ArrayList<BufferedImage>());
+		idle = Collections.synchronizedList(new ArrayList<BufferedImage>());
 		attackRate = 3000;
 		damaged = false;
 		attackSpeed = -1.0;
@@ -70,12 +87,20 @@ public class Enemy extends MovingComponent implements Action{
 			BufferedImage image2 = sheet.getSubimage(60, 5, 32, 37);
 			BufferedImage image3 = sheet.getSubimage(110, 5, 32, 38);
 			
+			idle.add(image1);
+			idle.add(image2);
+			idle.add(image3);
+			
 			BufferedImage image4 = sheet.getSubimage(159, 5, 34, 37);
 			BufferedImage image5 = sheet.getSubimage(207, 5, 38, 38);
 			BufferedImage image6 = sheet.getSubimage(256, 4, 40, 39);
 			BufferedImage image7 = sheet.getSubimage(305, 5, 41, 37);
 			
-			
+			attack.add(image4);
+			attack.add(image5);
+			attack.add(image6);
+			attack.add(image7);
+			buff = image1;
 			load = true;
 			update();
 		} catch (IOException e) {
@@ -86,6 +111,7 @@ public class Enemy extends MovingComponent implements Action{
 	public void update(Graphics2D g){
 		if(load){
 			image = (Image) buff;
+			
 			g.drawImage(image,0,0 , getWidth(), getHeight(), 0, 0, image.getWidth(null), image.getHeight(null),
 					null);
 			
@@ -105,11 +131,13 @@ public class Enemy extends MovingComponent implements Action{
 				if(player.getZ()+300 > z && attackSpeed < 0){
 					attackSpeed*=-1;
 					side = getWidth();
+					flip();
 				}
 				else{
 					if(player.getZ()+300 < z && attackSpeed > 0){
 						attackSpeed*=-1;
 						side = 0;
+						flip();
 					}
 				}
 				checkAction();
@@ -119,23 +147,54 @@ public class Enemy extends MovingComponent implements Action{
 			}
 		}
 	}
+	public void flip(){
+		for(int i = 0; i < attack.size(); i++){
+			BufferedImage img = attack.get(i);
+			AffineTransform tx = AffineTransform.getScaleInstance(-1, 1);
+			tx.translate(-(img.getWidth(null)), 0);
+			
+			AffineTransformOp op = new AffineTransformOp(tx, 
+					 AffineTransformOp.TYPE_NEAREST_NEIGHBOR); 
+			img = op.filter(img, null);
+			attack.add(i,img);
+			attack.remove(i+1);
+			
+		}
+	}
 	private void checkAction() {
 		if(isCollided() && !damaged){
 			damaged = true;
 			action.act();
 		}
 		long current = System.currentTimeMillis();
+		
 		if(current - lastAttack >= attackRate){
-			EnemyAttack atk = new EnemyAttack((int)getPosx(), (getY() + getHeight()/2) - 10, 30,30,
-			attackSpeed, z+side,"resources/circle.png");
-			atk.setAction(new Action(){
-				public void act(){
-					Start.screen.getPlayer().decreaseHP();
-				}
-			});
-			atk.play();
-			Start.screen.addObject(atk);
-			lastAttack = current;
+			attacking = true;
+			idling = false;
+			if(attacking && System.currentTimeMillis() - atklast >= atkRate){
+				buff = attack.get(attackIdx%attack.size());
+				setWidth(buff.getWidth(null));
+				setHeight(buff.getHeight(null));
+				attackIdx++;
+				atklast = System.currentTimeMillis();
+				clear();
+			}
+			if(attackIdx >= attack.size()){
+				EnemyAttack atk = new EnemyAttack((int)getPosx(), (getY() + getHeight()/2) - 10, 30,30,
+				attackSpeed, 0,z+side,"resources/circle.png");
+				atk.setAction(new Action(){
+					public void act(){
+						Start.screen.getPlayer().decreaseHP();
+					}
+				});
+				atk.play();
+				Start.screen.addObject(atk);
+				lastAttack = current;
+				attacking = false;
+				attackIdx = 0;
+				idleIdx = 0;
+				clear();
+			}
 		}
 	}
 	public boolean isCollided(){
@@ -191,6 +250,11 @@ public class Enemy extends MovingComponent implements Action{
 	}
 	public int getHP(){
 		return this.hp;
+	}
+	public void setAttack(boolean b){
+		if(!b){
+			
+		}
 	}
 
 }

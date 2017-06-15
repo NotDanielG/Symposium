@@ -116,6 +116,7 @@ public class PlayerAttack extends MovingComponent {
 								hit = true;
 								e[i][0].reduceHP();
 								if(e[i][0].getHP() <= 0){
+									player.increaseHP();
 									Start.screen.getEnemies()[i][0].setRunning(false);
 									Start.screen.remove(Start.screen.getEnemies()[i][0]);
 									Start.screen.getEnemies()[i][0] = null;
